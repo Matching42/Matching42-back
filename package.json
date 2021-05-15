@@ -1,0 +1,36 @@
+{
+  "name": "matching42-back",
+  "version": "1.0.0",
+  "description": "### member - snpark, seolim, hokim, minjakim, kwlee, hyeokim",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --exec ts-node ./srcs/app.tsx"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Matching42/Matching42-back.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Matching42/Matching42-back/issues"
+  },
+  "homepage": "https://github.com/Matching42/Matching42-back#readme",
+  "dependencies": {
+    "@types/express": "^4.17.11",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.23",
+    "@typescript-eslint/eslint-plugin": "^4.23.0",
+    "@typescript-eslint/parser": "^4.23.0",
+    "dotenv": "^9.0.2",
+    "eslint": "^7.26.0",
+    "jest": "^26.6.3",
+    "nodemon": "^2.0.7",
+    "ts-jest": "^26.5.6",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  }
+}
