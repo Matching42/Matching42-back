@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const db_connect = async (url: string): Promise<void> => {
+const connectDB = async (url: string): Promise<void> => {
     if (url === '') {
         console.log('Error: DB url environment not found\ncheck in connect url');
         return;
@@ -14,4 +14,4 @@ const db_connect = async (url: string): Promise<void> => {
         .catch((err) => console.log(err));
 };
 
-export default db_connect;
+export default connectDB;
