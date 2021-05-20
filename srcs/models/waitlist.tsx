@@ -1,5 +1,6 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema
+import mongoose from 'mongoose';
+
+const Schema = mongoose.Schema;
 
 // WaitList schma 정의
 const waitlistchema = new Schema({
@@ -14,4 +15,6 @@ const waitlistchema = new Schema({
 	}]
 });
 
-module.exports = mongoose.model('waitlist', waitlistchema, 'WaitList');
+const WaitList = mongoose.model('waitlist', waitlistchema, 'WaitList');
+
+export default WaitList;
