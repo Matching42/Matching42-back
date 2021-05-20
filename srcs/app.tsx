@@ -6,6 +6,7 @@ import { connectDB } from './config';
 import router from './routes';
 import bodyParser from 'body-parser';
 
+
 const runServer = async () => {
     console.log('Chcek DB connection...');
     await connectDB(process.env.DB_URL ? process.env.DB_URL : '');
