@@ -4,6 +4,7 @@ dotenv.config();
 
 import { connectDB } from './config';
 import router from './routes';
+import bodyParser from 'body-parser';
 
 const runServer = async () => {
     console.log('Chcek DB connection...');
@@ -13,6 +14,8 @@ const runServer = async () => {
     const app = express();
 
     /* Set middleware */
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: false }));
     app.use(router);
 
     /* Run server */

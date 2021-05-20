@@ -7,4 +7,6 @@ const router = Router();
 */
 router.get('/example', controller.exampleController);
 
+router.patch('/team/:teamid', controller.updateTeam);
+
 export default router;
