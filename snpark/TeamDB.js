@@ -22,6 +22,7 @@ const teamSchema = new mongoose.Schema({
 		type: String,
 		enum: TeamState
 	},
+	startDate: {type: Date},
 	notionLink: {type: String
 		unique: true
 	},
