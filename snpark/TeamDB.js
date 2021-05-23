@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+const Schema = mongoose.Schema;
+
 mongoose.set('useCreateIndex', true);
 
 enum TeamState {
@@ -9,7 +11,7 @@ enum TeamState {
 	"wait_member"
 };
 
-const teamSchema = new mongoose.Schema({
+const teamSchema = new Schema({
 	ID: {type: String,
 		default: true,
 		immutable: true,
@@ -23,10 +25,10 @@ const teamSchema = new mongoose.Schema({
 		enum: TeamState
 	},
 	startDate: {type: Date},
-	notionLink: {type: String
+	notionLink: {type: String,
 		unique: true
 	},
-	gitLink: {type: String
+	gitLink: {type: String,
 		unique: true
 	},
 	teamName: {type: String,
@@ -35,3 +37,5 @@ const teamSchema = new mongoose.Schema({
 });
 
 const Team = mongoose.model('Team', teamSchema);
+
+export default Team;
