@@ -11,7 +11,7 @@ const waitlistchema = new Schema({
     },
     user: [
         {
-            user_ID: String,
+            user_ID: { type: String, unique: true },
             waited_at: { type: Date, default: Date.now },
         },
     ],
