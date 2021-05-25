@@ -6,5 +6,6 @@ const router = Router();
     Set your router, but must check order of router
 */
 router.get('/example', controller.exampleController);
+router.get('/user/:userId', controller.getUser);
 
 export default router;
