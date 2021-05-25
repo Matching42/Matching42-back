@@ -7,6 +7,6 @@ const router = Router();
 */
 router.get('/example', controller.exampleController);
 
-router.post('/waitlist', controller.addWaitList);
+router.post('/waitlist', controller.post_waitlist);
 
 export default router;

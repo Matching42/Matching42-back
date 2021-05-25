@@ -1,2 +1,2 @@
 export { default as exampleController } from './exampleController';
-export { addWaitList } from './waitlistController';
+export { post_waitlist } from './controller.waitlist';
