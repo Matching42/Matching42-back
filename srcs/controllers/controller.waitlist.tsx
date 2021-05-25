@@ -4,7 +4,9 @@ import User from '../models/model.user';
 
 const post_waitlist: RequestHandler = async (req, res) => {
     try {
-        //subject_name 유효성 검사
+        const user_document = await User.findOne({ ID: req.body.user_ID }).exec();
+        if (user_document === null || user_document === undefined)
+            throw new Error('This user_ID does not exist.');
         const waitlist_document = await WaitList.findOne({
             subject_name: req.body.subject_name,
         }).exec();
@@ -16,7 +18,6 @@ const post_waitlist: RequestHandler = async (req, res) => {
                     'The user is already registered in the ' + req.body.subject_name + ' subject'
                 );
         }
-        // User document update
         await User.updateOne(
             { ID: req.body.user_ID },
             {
@@ -27,7 +28,6 @@ const post_waitlist: RequestHandler = async (req, res) => {
             { runValidators: true, lean: true }
         ).exec();
         const obj_user = { user_ID: req.body.user_ID };
-        // WaitList update.
         await WaitList.updateOne(
             { subject_name: req.body.subject_name },
             { $push: { user: obj_user } },
