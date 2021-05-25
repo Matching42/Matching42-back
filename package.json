@@ -23,7 +23,8 @@
     "@types/mongoose": "^5.10.5",
     "axios": "^0.21.1",
     "express": "^4.17.1",
-    "mongoose": "^5.12.9"
+    "mongoose": "^5.12.9",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
