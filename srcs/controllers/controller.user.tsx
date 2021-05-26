@@ -6,10 +6,16 @@ const getUser: RequestHandler = async (req, res) => {
         const userId = req.params.userId;
         if (!userId) {
             const allUsers = await User.find({});
-            res.json(allUsers);
+            res.status(200).json({
+                success: true,
+                data: allUsers,
+            });
         } else {
             const user = await User.findOne({ ID: userId });
-            res.json(user);
+            res.status(200).json({
+                success: true,
+                data: user,
+            });
         }
     } catch (error) {
         res.status(400).json({
