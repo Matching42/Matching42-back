@@ -23,24 +23,28 @@ const post_waitlist: RequestHandler = async (req, res) => {
                 );
         }
 
-        await User.updateOne(
+        const Changed_user = await User.findOneAndUpdate(
             { ID: req.body.user_ID },
             {
                 waitMatching: req.body.subject_name,
                 gitID: req.body.gitid,
                 cluster: req.body.cluster,
             },
-            { runValidators: true, lean: true }
+            { new: true, runValidators: true }
         ).exec();
 
         const obj_user = { user_ID: req.body.user_ID };
-        await WaitList.updateOne(
+        const Changed_waitlist = await WaitList.findOneAndUpdate(
             { subject_name: req.body.subject_name },
             { $push: { user: obj_user } },
-            { runValidators: true }
+            { new: true, runValidators: true }
         ).exec();
 
-        res.json({ success: true });
+        res.status(200).json({
+            success: true,
+            User: Changed_user,
+            WaitList: Changed_waitlist,
+        });
     } catch (e) {
         if (e.request) e.message = 'not found gitid';
 
@@ -54,4 +58,4 @@ const post_waitlist: RequestHandler = async (req, res) => {
     }
 };
 
-export { post_waitlist };
+export default post_waitlist;
