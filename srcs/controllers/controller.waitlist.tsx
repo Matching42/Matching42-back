@@ -1,23 +1,11 @@
 import { RequestHandler } from 'express';
-import request from 'request';
+import axios from 'axios';
 import WaitList from '../models/model.waitlist';
 import User from '../models/model.user';
 
 const post_waitlist: RequestHandler = async (req, res) => {
     try {
-        request(
-            {
-                url: 'https://api.github.com/users/' + req.body.gitid,
-                headers: {
-                    'User-Agent': 'request',
-                },
-            },
-            (error, response) => {
-                if (200 !== response.statusCode) throw new Error('Invalid gitid.');
-                else console.log(response.statusCode);
-            }
-        );
-
+        await axios.get('https://api.github.com/users/' + req.body.gitid);
         const user_document = await User.findOne({ ID: req.body.user_ID }).exec();
         if (user_document === null || user_document === undefined)
             throw new Error('This user_ID does not exist.');
@@ -49,6 +37,7 @@ const post_waitlist: RequestHandler = async (req, res) => {
         ).exec();
         res.json({ success: true });
     } catch (e) {
+        if (e.request) e.message = 'not found gitid';
         res.status(400).json({
             success: false,
             error: {
