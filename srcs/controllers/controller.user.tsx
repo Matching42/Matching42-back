@@ -28,4 +28,4 @@ const getUser: RequestHandler = async (req, res) => {
     }
 };
 
-export { getUser };
+export default getUser;
