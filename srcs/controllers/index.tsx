@@ -1,3 +1,3 @@
 export { default as exampleController } from './exampleController';
 
-export { updateTeam } from './controller.team';
+export { default as updateTeam } from './controller.team';

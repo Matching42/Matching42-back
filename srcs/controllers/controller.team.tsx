@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import Team from '../models/TeamDB';
+import Team from '../models/model.team';
 
 const updateTeam: RequestHandler = async (req, res) => {
     try {
@@ -25,4 +25,4 @@ const updateTeam: RequestHandler = async (req, res) => {
     }
 };
 
-export { updateTeam };
+export default updateTeam;
