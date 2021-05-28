@@ -10,20 +10,21 @@ const addMember: RequestHandler = async (req, res) => {
         if (user === null) throw new Error('Invalid User ID');
         if (team === null) throw new Error('Invalid Team ID');
         if (team.memberID.indexOf(user.ID) !== -1) throw new Error('The User already exists');
-        const updated_team = await Team.findOneAndUpdate(
+        if (team.state !== 'wait_member') throw new Error("Can't add a member to this team");
+        const updatedTeam = await Team.findOneAndUpdate(
             { ID: team.ID },
             { $push: { memberID: user.ID } },
             { new: true }
         );
-        const updated_user = await User.findOneAndUpdate(
+        const updatedUser = await User.findOneAndUpdate(
             { ID: user.ID },
             { $set: { teamID: team.ID } },
             { new: true }
         );
         res.status(200).json({
             success: true,
-            team: updated_team,
-            user: updated_user,
+            team: updatedTeam,
+            user: updatedUser,
         });
     } catch (error) {
         res.status(400).json({
