@@ -1,9 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
-dotenv.config();
-
 import { connectDB } from './config';
 import router from './routes';
+import bodyParser from 'body-parser';
+
+dotenv.config();
 
 const runServer = async () => {
     console.log('Chcek DB connection...');
@@ -15,6 +16,8 @@ const runServer = async () => {
     /* Set middleware */
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: false }));
     app.use(router);
 
     /* Run server */

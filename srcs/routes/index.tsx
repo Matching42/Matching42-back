@@ -7,5 +7,8 @@ const router = Router();
 */
 router.get('/example', controller.exampleController);
 router.post('/addmember', controller.addMember);
+router.patch('/team/:teamid', controller.updateTeam);
+router.get('/user', controller.getUser);
+router.get('/user/:userId', controller.getUser);
 
 export default router;
