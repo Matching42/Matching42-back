@@ -11,5 +11,6 @@ router.get('/user', controller.getUser);
 router.get('/user/:userId', controller.getUser);
 
 router.post('/waitlist', controller.PostWaitList);
+router.post('/addmember', controller.addMember);
 
 export default router;
