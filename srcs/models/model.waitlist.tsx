@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 // WaitList schma 정의
-const waitlistchema = new Schema({
+const WaitListSchema = new Schema({
     subject_name: {
         type: String,
         required: true,
@@ -17,6 +17,6 @@ const waitlistchema = new Schema({
     ],
 });
 
-const WaitList = mongoose.model('waitlist', waitlistchema, 'WaitList');
+const WaitList = mongoose.model('waitlist', WaitListSchema, 'WaitList');
 
 export default WaitList;
