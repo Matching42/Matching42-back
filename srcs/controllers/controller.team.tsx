@@ -14,7 +14,7 @@ const updateTeam: RequestHandler = async (req, res) => {
         team = await Team.findOne({ ID: req.params.teamid });
         res.json({
             success: true,
-            team: team,
+            team: team
         });
     } catch (e) {
         res.status(400).json({
