@@ -10,4 +10,6 @@ router.patch('/team/:teamid', controller.updateTeam);
 router.get('/user', controller.getUser);
 router.get('/user/:userId', controller.getUser);
 
+router.post('/waitlist', controller.PostWaitList);
+
 export default router;
