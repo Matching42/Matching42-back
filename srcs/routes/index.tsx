@@ -7,8 +7,8 @@ const router = Router();
 */
 router.get('/example', controller.exampleController);
 router.patch('/team/:teamid', controller.updateTeam);
-router.post('/addmember', controller.addMember);
 router.get('/user', controller.getUser);
 router.get('/user/:userId', controller.getUser);
+router.post('/addmember', controller.addMember);
 
 export default router;
