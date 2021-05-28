@@ -24,8 +24,7 @@
             {
                 "disallowPrototype": true,
                 "singleReturnOnly": false,
-                "classPropertiesAllowed": false,
-                "Trailing Commas": false
+                "classPropertiesAllowed": false
             }
         ]
     }
