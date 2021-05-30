@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-const WaitListSchema = new Schema({
+const WaitlistSchema = new Schema({
     subject_name: {
         type: String,
         required: true,
@@ -16,4 +16,4 @@ const WaitListSchema = new Schema({
     ],
 });
 
-export default mongoose.model('Waitlist', WaitListSchema, 'Waitlist');
+export default mongoose.model('Waitlist', WaitlistSchema, 'Waitlist');

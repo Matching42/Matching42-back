@@ -1,7 +1,6 @@
 import { RequestHandler } from 'express';
 import axios from 'axios';
-import WaitList from '../models/model.waitlist';
-import { User } from '../models';
+import { User, Waitlist } from '../models';
 
 const addUser2Waitlist: RequestHandler = async (req, res) => {
     try {
@@ -11,13 +10,13 @@ const addUser2Waitlist: RequestHandler = async (req, res) => {
         if (UserDocument === null || UserDocument === undefined)
             throw new Error('This user_ID does not exist.');
 
-        const WaitListDocument = await WaitList.findOne({
+        const WaitlistDocument = await Waitlist.findOne({
             subject_name: req.body.subject_name,
         }).exec();
-        if (WaitListDocument === null || WaitListDocument === undefined)
+        if (WaitlistDocument === null || WaitlistDocument === undefined)
             throw new Error('Invalid subject_name');
-        for (let i = 0; i < WaitListDocument.user.length; i++) {
-            if (WaitListDocument.user[i].user_ID === req.body.user_ID)
+        for (let i = 0; i < WaitlistDocument.user.length; i++) {
+            if (WaitlistDocument.user[i].user_ID === req.body.user_ID)
                 throw new Error(
                     'The user is already registered in the ' + req.body.subject_name + ' subject'
                 );
@@ -34,7 +33,7 @@ const addUser2Waitlist: RequestHandler = async (req, res) => {
         ).exec();
 
         const SubjectUser = { user_ID: req.body.user_ID };
-        const ChangedWaitList = await WaitList.findOneAndUpdate(
+        const ChangedWaitlist = await Waitlist.findOneAndUpdate(
             { subject_name: req.body.subject_name },
             { $push: { user: SubjectUser } },
             { new: true, runValidators: true }
@@ -43,7 +42,7 @@ const addUser2Waitlist: RequestHandler = async (req, res) => {
         res.status(200).json({
             success: true,
             User: ChangedUser,
-            WaitList: ChangedWaitList,
+            Waitlist: ChangedWaitlist,
         });
     } catch (e) {
         if (e.request) e.message = 'not found gitid';
