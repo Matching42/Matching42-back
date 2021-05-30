@@ -16,4 +16,4 @@ const WaitListSchema = new Schema({
     ],
 });
 
-export default mongoose.model('waitlist', WaitListSchema, 'WaitList');
+export default mongoose.model('Waitlist', WaitListSchema, 'Waitlist');
