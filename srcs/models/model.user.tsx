@@ -6,7 +6,6 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    token: String,
     intraInfo: [
         {
             blackholed_at: {
