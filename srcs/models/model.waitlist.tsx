@@ -3,17 +3,17 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const WaitlistSchema = new Schema({
-    subject_name: {
+    subjectName: {
         type: String,
         required: true,
         unique: true,
     },
     user: [
         {
-            user_ID: { type: String, unique: true },
-            waited_at: { type: Date, default: Date.now },
+            userID: { type: String },
+            waitedAt: { type: Date, default: Date.now },
         },
     ],
 });
 
-export default mongoose.model('Waitlist', WaitlistSchema, 'Waitlist');
+export default mongoose.model('waitlist', WaitlistSchema, 'Waitlist');
