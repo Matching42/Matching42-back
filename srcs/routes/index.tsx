@@ -6,5 +6,11 @@ const router = Router();
     Set your router, but must check order of router
 */
 router.get('/example', controller.exampleController);
+router.patch('/team/:teamid', controller.updateTeam);
+router.get('/user', controller.getUser);
+router.get('/user/:userId', controller.getUser);
+
+router.post('/waitlist', controller.PostWaitList);
+router.post('/addmember', controller.addMember);
 
 export default router;
