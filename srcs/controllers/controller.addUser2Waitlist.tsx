@@ -3,7 +3,7 @@ import axios from 'axios';
 import WaitList from '../models/model.waitlist';
 import { User } from '../models';
 
-const addWaitlist: RequestHandler = async (req, res) => {
+const addUser2Waitlist: RequestHandler = async (req, res) => {
     try {
         await axios.get('https://api.github.com/users/' + req.body.gitid);
 
@@ -58,4 +58,4 @@ const addWaitlist: RequestHandler = async (req, res) => {
     }
 };
 
-export default addWaitlist;
+export default addUser2Waitlist;
