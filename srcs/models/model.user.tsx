@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 
-// User Schema 정의
 const userSchema = new mongoose.Schema({
     ID: {
         type: String,
@@ -39,6 +38,4 @@ const userSchema = new mongoose.Schema({
     },
 });
 
-const User = mongoose.model('user', userSchema, 'User');
-
-export default User;
+export default mongoose.model('user', userSchema, 'User');

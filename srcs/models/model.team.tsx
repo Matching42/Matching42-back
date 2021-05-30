@@ -26,5 +26,4 @@ const teamSchema = new Schema({
     teamName: { type: String, unique: true },
 });
 
-const Team = mongoose.model('Team', teamSchema, 'Team');
-export default Team;
+export default mongoose.model('Team', teamSchema, 'Team');

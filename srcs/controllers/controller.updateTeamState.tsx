@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import Team from '../models/model.team';
+import { Team } from '../models';
 
 const updateTeam: RequestHandler = async (req, res) => {
     try {
