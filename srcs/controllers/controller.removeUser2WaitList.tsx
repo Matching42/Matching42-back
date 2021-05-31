@@ -35,9 +35,16 @@ const removeUser2Waitlist: RequestHandler = async (req, res) => {
             { new: true, runValidators: true }
         ).exec();
 
+        const ChangedWaitlist = await Waitlist.findOneAndUpdate(
+            { subjectName: WaitlistDocument.subjectName },
+            { $pull: { user: WaitlistUserInfo } },
+            { new: true, runValidators: true }
+        ).exec();
+
         res.status(200).json({
             success: true,
             User: ChangedUser,
+            Waitlist: ChangedWaitlist,
         });
     } catch (e) {
         res.status(400).json({
