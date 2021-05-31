@@ -9,6 +9,24 @@ const removeUser2Waitlist: RequestHandler = async (req, res) => {
         if (UserDocument.waitMatching === null)
             throw new Error('This user_ID not registered in any subject');
 
+        const WaitlistDocument = await Waitlist.findOne({
+            subjectName: UserDocument.waitMatching,
+        }).exec();
+        if (WaitlistDocument === null || WaitlistDocument === undefined)
+            throw new Error('This subjectName does not exist.');
+        let WaitlistUserInfo = null;
+        for (let i = 0; i < WaitlistDocument.user.length; i++) {
+            if (WaitlistDocument.user[i].userID === req.params.userId) {
+                WaitlistUserInfo = WaitlistDocument.user[i];
+                break;
+            }
+        }
+        if (WaitlistUserInfo === null) {
+            throw new Error(
+                'This user_ID not registered in ' + WaitlistDocument.subjectName + 'subject'
+            );
+        }
+
         res.status(200).json({
             success: true,
         });
