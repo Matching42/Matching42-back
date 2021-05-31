@@ -27,8 +27,17 @@ const removeUser2Waitlist: RequestHandler = async (req, res) => {
             );
         }
 
+        const ChangedUser = await User.findOneAndUpdate(
+            { ID: req.params.userId },
+            {
+                waitMatching: null,
+            },
+            { new: true, runValidators: true }
+        ).exec();
+
         res.status(200).json({
             success: true,
+            User: ChangedUser,
         });
     } catch (e) {
         res.status(400).json({
