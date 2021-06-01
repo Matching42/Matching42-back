@@ -12,3 +12,7 @@ const runServer = async () => {
 };
 
 runServer();
+
+const no = () => {
+    return 1;
+};
