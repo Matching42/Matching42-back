@@ -1,6 +1,5 @@
-export { default as exampleController } from './exampleController';
-
-export { default as updateTeam } from './controller.team';
-export { default as getUser } from './controller.user';
-export { default as addMember } from './controller.addmember';
-export { default as postWaitList } from './controller.waitlist';
+export { default as updateTeamState } from './controller.updateTeamState';
+export { default as getUser } from './controller.getUser';
+export { default as addUser2Team } from './controller.addUser2Team';
+export { default as addUser2WaitList } from './controller.addUser2Waitlist';
+export { default as removeUser2WaitList } from './controller.removeUser2WaitList';
