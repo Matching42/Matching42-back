@@ -10,5 +10,6 @@ router.get('/user', controller.getUser);
 router.get('/user/:userId', controller.getUser);
 router.post('/waitlist', controller.addUser2WaitList);
 router.post('/addmember', controller.addUser2Team);
+router.delete('/waitlist/:userId', controller.removeUser2WaitList);
 
 export default router;
