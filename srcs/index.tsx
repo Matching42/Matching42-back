@@ -8,7 +8,7 @@ const runServer = async () => {
     await connectDB(process.env.DB_URL ? process.env.DB_URL : '');
     /* Run server */
     console.log('Set application...');
-    pp.listen(process.env.PORT, () => console.log(`server Run with port: ${process.env.PORT}`));
+    app.listen(process.env.PORT, () => console.log(`server Run with port: ${process.env.PORT}`));
 };
 
 runServer();
