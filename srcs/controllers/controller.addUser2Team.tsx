@@ -1,6 +1,5 @@
 import { RequestHandler } from 'express';
-import Team from '../models/model.team';
-import User from '../models/model.user';
+import { Team, User } from '../models';
 
 const addMember: RequestHandler = async (req, res) => {
     try {

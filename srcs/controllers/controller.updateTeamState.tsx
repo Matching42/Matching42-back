@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
-import Team from '../models/model.team';
+import { Team } from '../models';
 
-const updateTeam: RequestHandler = async (req, res) => {
+const updateTeamState: RequestHandler = async (req, res) => {
     try {
         let team = await Team.findOne({ ID: req.params.teamid });
         if (req.body.state === undefined || team === null)
@@ -14,7 +14,7 @@ const updateTeam: RequestHandler = async (req, res) => {
         team = await Team.findOne({ ID: req.params.teamid });
         res.json({
             success: true,
-            team: team
+            team: team,
         });
     } catch (e) {
         res.status(400).json({
@@ -27,4 +27,4 @@ const updateTeam: RequestHandler = async (req, res) => {
     }
 };
 
-export default updateTeam;
+export default updateTeamState;
