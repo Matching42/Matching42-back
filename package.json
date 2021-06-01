@@ -4,7 +4,7 @@
   "description": "### member - snpark, seolim, hokim, minjakim, kwlee, hyeokim",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec ts-node ./srcs/app.tsx",
+    "start": "nodemon --exec ts-node ./srcs/index.tsx",
     "test": "jest"
   },
   "repository": {
