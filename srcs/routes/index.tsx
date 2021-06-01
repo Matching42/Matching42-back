@@ -8,8 +8,8 @@ const router = Router();
 router.patch('/team/:teamid', controller.updateTeamState);
 router.get('/user', controller.getUser);
 router.get('/user/:userId', controller.getUser);
-router.post('/waitlist', controller.postWaitList);
-router.post('/addmember', controller.addMember);
+router.post('/waitlist', controller.addUser2WaitList);
+router.post('/addmember', controller.addUser2Team);
 router.get('/', (req, res) => {
     res.json({ data: 'data' });
 });
