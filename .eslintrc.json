@@ -27,5 +27,6 @@
                 "classPropertiesAllowed": false
             }
         ]
-    }
+    },
+    "ignorePatterns": "jest.config.js"
 }

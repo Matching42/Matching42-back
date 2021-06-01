@@ -12,5 +12,8 @@ router.get('/user/:userId', controller.getUser);
 
 router.post('/waitlist', controller.postWaitList);
 router.post('/addmember', controller.addMember);
+router.get('/', (req, res) => {
+    res.json({ data: 'data' });
+});
 
 export default router;
