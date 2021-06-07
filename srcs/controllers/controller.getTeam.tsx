@@ -4,6 +4,7 @@ import { Team } from '../models';
 const getTeam: RequestHandler = async (req, res) => {
     try {
         const teamId = req.params.teamId;
+        console.log(teamId);
         if (!teamId) {
             const limit = req.query.limit;
             const page = req.query.page;
