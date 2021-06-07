@@ -1,14 +1,12 @@
 import { RequestHandler } from 'express';
 import { Team } from '../models';
 
-//var limit: number = 5;
-
 const getTeam: RequestHandler = async (req, res) => {
     try {
         const teamId = req.params.teamId;
         if (!teamId) {
-            //if (req.params.limit !== limit)
-            //  limit = req.params.limit;
+            const limit = req.query.limit;
+            const page = req.query.page;
             const allTeams = await Team.find({});
             res.status(200).json({
                 success: true,
