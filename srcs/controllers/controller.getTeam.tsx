@@ -4,14 +4,20 @@ import { Team } from '../models';
 const getTeam: RequestHandler = async (req, res) => {
     try {
         const teamId = req.params.teamId;
-        console.log(teamId);
         if (!teamId) {
-            const limit = req.query.limit;
-            const page = req.query.page;
+            let limit: number = 5;
+            let page: number = 0;
+            if (req.query.limit)
+                limit = parseInt(req.query.limit as string);
+            if (req.query.page)
+                page = parseInt(req.query.page as string);
             const allTeams = await Team.find({});
+            let pageTeams: Array<string> = [];
+            for (let i = 0; i < limit && allTeams[i + limit * page]; i++)
+                pageTeams.push(allTeams[i + limit * page]);
             res.status(200).json({
                 success: true,
-                data: allTeams
+                data: pageTeams
             });
         } else {
             const team = await Team.findOne({ ID: teamId});
