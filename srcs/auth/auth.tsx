@@ -27,22 +27,14 @@ const decodeToken = (token: string): string | object | undefined => {
 
 const isAuth: RequestHandler = (req, res, next) => {
     const token = getToken(req);
-    if (!token) {
-        console.log('work!');
-        res.status(200).send({
-            success: true,
-            access_token: generateToken({ id: '111' }),
-        });
-        return;
-    }
+    if (!token) return next();
     const decode = decodeToken(token);
     if (!decode) return next(); /* 42 Auth */
 
-    console.log('work2');
     res.status(200).send({
         success: true,
         access_token: token,
     });
 };
 
-export { isAuth };
+export { isAuth, decodeToken, getToken, generateToken };

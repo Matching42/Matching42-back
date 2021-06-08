@@ -1,51 +1,19 @@
 import { Router } from 'express';
 import dotenv from 'dotenv';
 import * as controller from '../controllers';
-// import { use, serializeUser, deserializeUser, authenticate } from 'passport';
-// import ensureLoggedIn from 'connect-ensure-login';
-// import { Strategy as FortyTwoStrategy } from 'passport-42';
-
-dotenv.config();
+import { fail, login, granted } from '../auth/controller.login';
 
 const router = Router();
-
 /*
     Set your router, but must check order of router
 */
+//import { isAuth } from '../auth/auth';
 
-// use(
-//     new FortyTwoStrategy(
-//         {
-//             clientID: process.env.FT_CLIENT_ID,
-//             clientSecret: process.env.FT_CLIENT_SECRET,
-//             callbackURL: process.env.RETURN_URL,
-//             passReqToCallback: true,
-//         },
-//         (req, accessToken, refreshToken, profile, done) => {
-//             req.session.accessToken = accessToken;
-//             req.session.refreshToken = refreshToken;
-//             console.log('succeed!');
-//             return done(null, profile.username);
-//         }
-//     )
-// );
-// serializeUser((user, done) => done(null, user));
-// deserializeUser((user: any, done) => done(null, user));
 
-// router.get('/', ensureLoggedIn.ensureLoggedIn('/login'), (req, res) => {
-//     res.send(req.user);
-// });
-// router.get('/login', authenticate('42'));
-// router.get('/login/return', authenticate('42', { failureRedirect: '/login' }), (req, res) => {
-//     res.redirect('/');
-// });
-// router.get('/logout', (req, res) => {
-//     req.logout();
-//     res.redirect('/');
-// });
+router.get('/login/42', login);
+router.get('/login/redirect', granted);
+router.get('/login/fail', fail);
 
-import { isAuth } from '../auth/auth';
-router.get('/login/42', isAuth);
 router.patch('/team/:teamid', controller.updateTeamState);
 router.get('/user', controller.getUser);
 router.get('/user/:userId', controller.getUser);
