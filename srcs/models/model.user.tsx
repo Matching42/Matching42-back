@@ -10,7 +10,6 @@ const userSchema = new mongoose.Schema({
         {
             blackholed_at: {
                 type: String,
-                required: true,
             },
             level: {
                 type: Number,
@@ -32,7 +31,7 @@ const userSchema = new mongoose.Schema({
     },
     cluster: {
         type: String,
-        enum: ['개포', '서초'],
+        enum: ['개포', '서초', null],
         default: null,
     },
 });
