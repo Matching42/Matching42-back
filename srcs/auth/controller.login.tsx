@@ -1,58 +1,35 @@
 import { RequestHandler } from 'express';
 import axios from 'axios';
-import { generateToken } from './auth';
-import { User } from '../models';
+import signup from './controller.signup';
+import { generateToken, getToken, decodeToken } from './auth.jwt';
+import { getUserFromDB, getUserFrom42 } from './auth.lib';
 import dotenv from 'dotenv';
 dotenv.config();
 
 /*
     TODO: set User from 42 type
 */
-const signup = async (user: any) => {
-    const newUser = new User({
-        ID: user.login,
-        intraInfo: user.cursus_users.map((cursus) => ({
-            blackholed_at: cursus.blackholed_at,
-            level: cursus.level,
-        })),
-    });
-
-    await newUser.save();
-};
-
-const getUserFrom42: (token: string) => any = async (token) => {
-    try {
-        const user = await axios('https://api.intra.42.fr/v2/me', {
-            headers: { Authorization: `Bearer ${token}` },
-        });
-        return user.data;
-    } catch (err) {
-        console.log(err);
-        return undefined;
-    }
-};
-
-const getUserFromDB: (login: string) => any = async (login) => {
-    try {
-        const user = await User.findOne({ ID: login });
-        return user;
-    } catch (err) {
-        console.log(err);
-        return undefined;
-    }
-};
-
 const fail: RequestHandler = (req, res) => {
     res.status(401).send({
         success: false,
-        message: 'user auth failed',
+        message: 'User auth failed in 42',
     });
 };
 
-const login: RequestHandler = (_, res) => {
-    res.redirect(
-        `https://api.intra.42.fr/oauth/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.RETURN_URI}&response_type=code`
-    );
+const login: RequestHandler = (req, res) => {
+    const token = getToken(req);
+    if (!token) {
+        return res.redirect(
+            `https://api.intra.42.fr/oauth/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.RETURN_URI}&response_type=code`
+        );
+    }
+    const decode = decodeToken(token);
+    if (!decode) {
+        return res.redirect(
+            `https://api.intra.42.fr/oauth/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.RETURN_URI}&response_type=code`
+        );
+    }
+    res.redirect(`http://localhost:3000?token=${token}`);
 };
 
 const granted: RequestHandler = async (req, res) => {
