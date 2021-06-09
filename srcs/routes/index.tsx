@@ -22,5 +22,4 @@ router.post('/addmember', controller.addUser2Team);
 router.get('/team', controller.getTeam);
 router.get('/team/:teamId', controller.getTeam);
 
-
 export default router;
