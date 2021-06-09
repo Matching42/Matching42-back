@@ -1,8 +1,10 @@
 import express from 'express';
+import dotenv from 'dotenv';
 import router from './routes';
 import cors from 'cors';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
+dotenv.config();
 
 const app = express();
 
@@ -13,7 +15,7 @@ app.use(cookieParser());
 app.use(session({ resave: false, saveUninitialized: false, secret: 'asfsa' }));
 app.use(
     cors({
-        origin: 'http://localhost:3000',
+        origin: process.env.CLIENT_URI,
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
         credentials: true,
     })

@@ -29,7 +29,7 @@ const login: RequestHandler = (req, res) => {
             `https://api.intra.42.fr/oauth/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.RETURN_URI}&response_type=code`
         );
     }
-    res.redirect(`http://localhost:3000?token=${token}`);
+    res.redirect(`${process.env.CLIENT_URI}?token=${token}`);
 };
 
 const granted: RequestHandler = async (req, res) => {
@@ -40,13 +40,13 @@ const granted: RequestHandler = async (req, res) => {
             client_id: process.env.CLIENT_ID,
             client_secret: process.env.CLIENT_SECRET,
             code: code,
-            redirect_uri: 'http://localhost:4000/login/redirect',
+            redirect_uri: process.env.RETURN_URI,
         });
         const userFrom42 = await getUserFrom42(data.data.access_token as string);
         const userFromDB = await getUserFromDB(userFrom42.login);
         if (!userFromDB) signup(userFrom42);
         const token = generateToken(userFrom42.login);
-        res.redirect(`http://localhost:3000?token=${token}`);
+        res.redirect(`${process.env.CLIENT_URI}?token=${token}`);
     } catch (err) {
         console.log(err);
     }
