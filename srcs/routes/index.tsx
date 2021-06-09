@@ -7,15 +7,14 @@ const router = Router();
 /*
     Set your router, but must check order of router
 */
-//import { isAuth } from '../auth/auth';
-
+import { isAuth } from '../auth/auth';
 
 router.get('/login/42', login);
 router.get('/login/redirect', granted);
 router.get('/login/fail', fail);
 
 router.patch('/team/:teamid', controller.updateTeamState);
-router.get('/user', controller.getUser);
+router.get('/user', isAuth, controller.getUser);
 router.get('/user/:userId', controller.getUser);
 router.post('/waitlist', controller.addUser2WaitList);
 router.post('/addmember', controller.addUser2Team);

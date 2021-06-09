@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import { RequestHandler } from 'express';
 dotenv.config();
 
-const generateToken = (user) => {
+const generateToken = (user): string => {
     return jwt.sign({ user }, process.env.JWT as string, { expiresIn: '6h' });
 };
 /* TODO: change any to other */
@@ -27,14 +27,11 @@ const decodeToken = (token: string): string | object | undefined => {
 
 const isAuth: RequestHandler = (req, res, next) => {
     const token = getToken(req);
-    if (!token) return next();
+    if (!token) return res.redirect(302, 'http://localhost:3000/login');
     const decode = decodeToken(token);
-    if (!decode) return next(); /* 42 Auth */
+    if (!decode) return res.redirect(302, 'http://localhost:3000/login');
 
-    res.status(200).send({
-        success: true,
-        access_token: token,
-    });
+    next();
 };
 
 export { isAuth, decodeToken, getToken, generateToken };
