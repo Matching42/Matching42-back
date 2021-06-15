@@ -11,7 +11,7 @@
  *                      type: object
  *                      properties:
  *                          blakholed_at:
- *                              type: date
+ *                              type: string
  *                          level:
  *                              type: number
  *                  waitMatching:
@@ -22,4 +22,5 @@
  *                      type: string
  *                  cluster:
  *                      type: string
+ *                      enum: ['개포', '서초', null]
  */
