@@ -5,16 +5,20 @@ import { Team } from '../models';
 
 dotenv.config();
 
+const checkError = (team) => {
+    if (team === null) throw new Error('There is no such Team');
+    if (team.subject === undefined) throw new Error('Team has no subject');
+    if (team.ID === undefined) throw new Error('Team has no ID');
+    if (team.gitLink) throw new Error('Team already has a gitLink');
+};
+
 const createGitRepo: RequestHandler = async (req, res) => {
     try {
-        console.log(`token ${process.env.GIT_TOKEN}`);
         let team = await Team.findOne({ ID: req.params.teamid });
-        if (team === null) throw new Error('no such team');
-        if (team.subject === undefined || team.ID === undefined)
-            throw new Error("team doesn't have subject or ID");
+        checkError(team);
         const createResult = await axios({
             method: 'post',
-            url: 'https://api.github.com/user/repos',
+            url: `https://api.github.com/orgs/${process.env.ORG_NAME}/repos`,
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `token ${process.env.GIT_TOKEN}`,
