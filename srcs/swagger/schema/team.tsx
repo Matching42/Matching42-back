@@ -11,7 +11,7 @@
  *                      type: string
  *                  memberID:
  *                      type: array
- *                      item:
+ *                      items:
  *                          type: string
  *                  subject:
  *                      type: string
@@ -19,8 +19,8 @@
  *                      type: date
  *                  notionLink:
  *                      type: string
- *                  gitLink
+ *                  gitLink:
  *                      type: string
- *                  teamName
+ *                  teamName:
  *                      type: string
  */
