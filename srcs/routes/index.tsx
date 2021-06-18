@@ -16,7 +16,7 @@ router.get('/login/42', login);
 router.get('/login/redirect', granted);
 router.get('/login/fail', fail);
 
-router.use(isAuth);
+// router.use(isAuth); //TODO : for testing, is delete
 router.patch('/team/:teamid', controller.updateTeamState);
 router.get('/user', controller.getUser);
 router.get('/user/:userId', controller.getUser);
