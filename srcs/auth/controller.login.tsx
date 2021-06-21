@@ -43,9 +43,16 @@ const granted: RequestHandler = async (req, res) => {
             redirect_uri: process.env.RETURN_URI,
         });
         const userFrom42 = await getUserFrom42(data.data.access_token as string);
+        if (userFrom42.cursus_users.length < 2) {
+            res.status(400).send({
+                success: false,
+                message: 'user Not correct 42 user',
+            });
+            return;
+        }
         const userFromDB = await getUserFromDB(userFrom42.login);
         if (!userFromDB) signup(userFrom42);
-        const token = generateToken(userFrom42.login);
+        const token = generateToken(userFrom42.login as string);
         res.redirect(`${process.env.CLIENT_URI}?token=${token}`);
     } catch (err) {
         console.log(err);

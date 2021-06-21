@@ -1,8 +1,7 @@
 import * as jwt from 'jsonwebtoken';
-import { tUser } from '../../@types/types.d';
 import { Request } from 'express';
 
-const generateToken = (user: tUser): string => {
+const generateToken = (user: string): string => {
     return jwt.sign({ user }, process.env.JWT as string, { expiresIn: '6h' });
 };
 /* TODO: change any to other */

@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { User } from '../models';
-import { tUser } from '../../@types/types.d';
+import { tUser, tIntra } from '../../@types/types.d';
 
-const getUserFrom42: (token: string) => any = async (token) => {
+const getUserFrom42: (token: string) => Promise<tIntra> = async (token) => {
     try {
         const user = await axios('https://api.intra.42.fr/v2/me', {
             headers: { Authorization: `Bearer ${token}` },
