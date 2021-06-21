@@ -5,25 +5,33 @@ const getTeam: RequestHandler = async (req, res) => {
     try {
         const teamId = req.params.teamId;
         if (!teamId) {
-            let limit: number = 5;
-            let page: number = 0;
-            if (req.query.limit)
+            let limit = 5;
+            let page = 0;
+            if (req.query.limit) {
                 limit = parseInt(req.query.limit as string);
-            if (req.query.page)
+            }
+            if (req.query.page) {
                 page = parseInt(req.query.page as string);
+            }
             const allTeams = await Team.find({});
-            let pageTeams: Array<string> = [];
+            if (!req.query.page && !req.query.limit) {
+                res.status(200).json({
+                    success: true,
+                    data: allTeams,
+                });
+            }
+            const pageTeams: Array<string> = [];
             for (let i = 0; i < limit && allTeams[i + limit * page]; i++)
                 pageTeams.push(allTeams[i + limit * page]);
             res.status(200).json({
                 success: true,
-                data: pageTeams
+                data: pageTeams,
             });
         } else {
-            const team = await Team.findOne({ ID: teamId});
+            const team = await Team.findOne({ ID: teamId });
             res.status(200).json({
                 sucess: true,
-                data: team
+                data: team,
             });
         }
     } catch (e) {
@@ -32,9 +40,9 @@ const getTeam: RequestHandler = async (req, res) => {
             error: {
                 code: e.name,
                 message: e.message,
-            }
+            },
         });
-    };
+    }
 };
 
 export default getTeam;
