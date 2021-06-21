@@ -4,37 +4,37 @@ import { User, Waitlist } from '../models';
 
 const addUser2Waitlist: RequestHandler = async (req, res) => {
     try {
-        await axios.get('https://api.github.com/users/' + req.body.gitid);
+        await axios.get('https://api.github.com/users/' + req.body.gitName);
 
-        const UserDocument = await User.findOne({ ID: req.body.user_ID }).exec();
+        const UserDocument = await User.findOne({ ID: req.body.userId }).exec();
         if (UserDocument === null || UserDocument === undefined)
-            throw new Error('This user_ID does not exist.');
+            throw new Error('This userId does not exist.');
 
         const WaitlistDocument = await Waitlist.findOne({
-            subject_name: req.body.subject_name,
+            subjectName: req.body.subjectName,
         }).exec();
         if (WaitlistDocument === null || WaitlistDocument === undefined)
-            throw new Error('Invalid subject_name');
+            throw new Error('Invalid subjectName');
         for (let i = 0; i < WaitlistDocument.user.length; i++) {
-            if (WaitlistDocument.user[i].user_ID === req.body.user_ID)
+            if (WaitlistDocument.user[i].userID === req.body.userId)
                 throw new Error(
-                    'The user is already registered in the ' + req.body.subject_name + ' subject'
+                    'The user is already registered in the ' + req.body.subjectName + ' subject'
                 );
         }
 
         const ChangedUser = await User.findOneAndUpdate(
-            { ID: req.body.user_ID },
+            { ID: req.body.userId },
             {
-                waitMatching: req.body.subject_name,
-                gitID: req.body.gitid,
+                waitMatching: req.body.subjectName,
+                gitName: req.body.gitName,
                 cluster: req.body.cluster,
             },
             { new: true, runValidators: true }
         ).exec();
 
-        const SubjectUser = { user_ID: req.body.user_ID };
+        const SubjectUser = { userID: req.body.userId };
         const ChangedWaitlist = await Waitlist.findOneAndUpdate(
-            { subject_name: req.body.subject_name },
+            { subjectName: req.body.subjectName },
             { $push: { user: SubjectUser } },
             { new: true, runValidators: true }
         ).exec();
@@ -45,7 +45,7 @@ const addUser2Waitlist: RequestHandler = async (req, res) => {
             Waitlist: ChangedWaitlist,
         });
     } catch (e) {
-        if (e.request) e.message = 'not found gitid';
+        if (e.request) e.message = 'not found gitName';
 
         res.status(400).json({
             success: false,

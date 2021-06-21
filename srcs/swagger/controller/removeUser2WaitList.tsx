@@ -32,10 +32,10 @@
  *              description: |
  *                오류가 발생해 특정 user를 subject 랜덤 매칭 대기열에서 삭제하지 못했을 경우 다음 결과가 반환됩니다.</br></br>
  *                -오류 예시</br>
- *                - 존재하지 않는 user_ID값이 들어온 경우 <br>
- *                - 해당 user_ID가 랜덤 매칭 대기중인 subject가 없는 경우 <br>
- *                - 존재하지 않는 subject_name값이 들어온 경우 <br>
- *                - 해당 subject 랜덤 매칭 대기열에 존재하지 않는 경우 <br>
+ *                - 존재하지 않는 userId 들어온 경우 <br>
+ *                - 해당 userId 랜덤 매칭 대기중인 subject가 없는 경우 <br>
+ *                - 입력된 userId를 가진 user가 존재하지 않는 subject에 등록되어 있는 경우 <br>
+ *                - 입력된 userId를 가진 user가 subject 랜덤 매칭 대기열에 등록되어 있지 않은 경우 <br>
  *              content:
  *                  application/json:
  *                      schema:
