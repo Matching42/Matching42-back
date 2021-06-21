@@ -24,5 +24,6 @@ router.post('/waitlist', controller.addUser2WaitList);
 router.post('/addmember', controller.addUser2Team);
 router.get('/team', controller.getTeam);
 router.get('/team/:teamId', controller.getTeam);
+router.post('/team/creategitrepo/:teamid', controller.createGitRepository);
 
 export default router;
