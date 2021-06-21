@@ -1,4 +1,4 @@
-import { RequestHandler } from 'express';
+import { RequestHandler, Request, Response } from 'express';
 import axios from 'axios';
 import signup from './controller.signup';
 import { generateToken, getToken, decodeToken } from './auth.jwt';
@@ -9,7 +9,7 @@ dotenv.config();
 /*
     TODO: set User from 42 type
 */
-const fail: RequestHandler = (req, res) => {
+const fail = (req: Request, res: Response): void => {
     res.status(401).send({
         success: false,
         message: 'User auth failed in 42',

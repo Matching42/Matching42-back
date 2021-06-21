@@ -1,6 +1,7 @@
 import { User } from '../models';
+import { tIntra } from '../../@types/types.d';
 
-const signup = async (user: any) => {
+const signup = async (user: tIntra): Promise<void> => {
     const newUser = new User({
         ID: user.login,
         intraInfo: user.cursus_users.map((cursus) => ({
