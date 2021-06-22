@@ -17,13 +17,13 @@ router.get('/login/redirect', granted);
 router.get('/login/fail', fail);
 
 router.use(isAuth);
-router.patch('/team/:teamid', controller.updateTeamState);
 router.get('/user', controller.getUser);
 router.get('/user/:userId', controller.getUser);
 router.post('/waitlist', controller.addUser2WaitList);
 router.post('/addmember', controller.addUser2Team);
 router.get('/team', controller.getTeam);
 router.get('/team/:teamId', controller.getTeam);
-router.post('/team/creategitrepo/:teamid', controller.createGitRepository);
+router.patch('/team/:teamId', controller.updateTeamState);
+router.post('/team/creategitrepo/:teamId', controller.createGitRepo);
 
 export default router;
