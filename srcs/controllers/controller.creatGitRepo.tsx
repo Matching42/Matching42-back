@@ -14,7 +14,7 @@ const checkError = (team) => {
 
 const createGitRepo: RequestHandler = async (req, res) => {
     try {
-        let team = await Team.findOne({ ID: req.params.teamid });
+        let team = await Team.findOne({ ID: req.params.teamID });
         checkError(team);
         const createResult = await axios({
             method: 'post',
@@ -29,14 +29,14 @@ const createGitRepo: RequestHandler = async (req, res) => {
                 private: true,
             },
         });
-        const git_url = createResult.data.html_url;
-        if (git_url === undefined) throw new Error('git creation failed');
+        const gitUrl = createResult.data.html_url;
+        if (gitUrl === undefined) throw new Error('git Repository creation failed');
         await Team.updateOne(
-            { ID: req.params.teamid },
-            { gitLink: git_url },
+            { ID: req.params.teamID },
+            { gitLink: gitUrl },
             { runValidators: true }
         );
-        team = await Team.findOne({ ID: req.params.teamid });
+        team = await Team.findOne({ ID: req.params.teamID });
         res.json({
             success: true,
             team,
