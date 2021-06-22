@@ -3,11 +3,11 @@ import { User, Waitlist } from '../models';
 
 const removeUser2Waitlist: RequestHandler = async (req, res) => {
     try {
-        const UserDocument = await User.findOne({ ID: req.params.userId }).exec();
+        const UserDocument = await User.findOne({ ID: req.params.userID }).exec();
         if (UserDocument === null || UserDocument === undefined)
-            throw new Error('This userId does not exist.');
+            throw new Error('This userID does not exist.');
         if (UserDocument.waitMatching === null)
-            throw new Error('This userId not registered in any subject');
+            throw new Error('This userID not registered in any subject');
 
         const WaitlistDocument = await Waitlist.findOne({
             subjectName: UserDocument.waitMatching,
@@ -16,19 +16,19 @@ const removeUser2Waitlist: RequestHandler = async (req, res) => {
             throw new Error('This subjectName does not exist.');
         let WaitlistUserInfo = null;
         for (let i = 0; i < WaitlistDocument.user.length; i++) {
-            if (WaitlistDocument.user[i].userID === req.params.userId) {
+            if (WaitlistDocument.user[i].userID === req.params.userID) {
                 WaitlistUserInfo = WaitlistDocument.user[i];
                 break;
             }
         }
         if (WaitlistUserInfo === null) {
             throw new Error(
-                'This user_ID not registered in ' + WaitlistDocument.subjectName + 'subject'
+                'This userID not registered in ' + WaitlistDocument.subjectName + 'subject'
             );
         }
 
         const ChangedUser = await User.findOneAndUpdate(
-            { ID: req.params.userId },
+            { ID: req.params.userID },
             {
                 waitMatching: null,
             },
