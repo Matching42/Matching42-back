@@ -1,11 +1,11 @@
 /**
  * @swagger
- * /team/{teamId}:
+ * /team/{teamID}:
  *  patch:
  *      description: 팀의 상태를 변경시키는 API입니다.
  *      parameters:
  *      - in: path
- *        name: teamId
+ *        name: teamID
  *        required: true
  *        schema:
  *          type: string
@@ -15,10 +15,10 @@
  *        required: true
  *        description: |
  *          ### 변경할 상태 정보입니다.</br>
- *          - progress - 매칭이 완료되어 프로젝트 진행 중입니다.</br>
- *          - end - 프로젝트가 종료되어 매칭이 팀이 닫혔습니다.</br>
- *          - less_member - 팀 멤버 수가 적은 상태로 매칭되었습니다</br>
- *          - wait_member - 팀 멤버를 기다리는 중입니다.
+ *          - progress - 팀 멤버가 3명 이상이 되어 정상적으로 진행 중입니다.</br>
+ *          - end - 팀의 학습이 종료되어 팀이 닫혔습니다.</br>
+ *          - less_member - 팀 멤버가 3명 미만으로 진행중이고 추가 멤버를 받지 않는 상태입니다</br>
+ *          - wait_member - 팀 멤버가 3명 미만으로 진행중이고 추가 멤버를 받는 상태입니다.
  *        content:
  *          application/json:
  *            schema:
