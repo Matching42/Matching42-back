@@ -11,7 +11,7 @@
  *                      type: object
  *                      properties:
  *                          blakholed_at:
- *                              type: string
+ *                              type: date
  *                          level:
  *                              type: number
  *                  waitMatching:
