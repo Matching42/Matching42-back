@@ -7,6 +7,7 @@ const getTeam: RequestHandler = async (req, res) => {
         if (!teamId) {
             let limit = 5;
             let page = 0;
+
             if (req.query.limit) {
                 limit = parseInt(req.query.limit as string);
             }
