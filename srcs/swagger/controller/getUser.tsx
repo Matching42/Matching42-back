@@ -56,12 +56,12 @@
 
 /**
  * @swagger
- * /user/{userId}:
+ * /user/{userID}:
  *  get:
- *      description: userId에 해당하는 유저 정보를 조회하는 API
+ *      description: userID에 해당하는 유저 정보를 조회하는 API
  *      parameters:
  *      - in: path
- *        name: userId
+ *        name: userID
  *        type: string
  *        description: 정보를 조회하고자 하는 유저의 ID
  *      responses:

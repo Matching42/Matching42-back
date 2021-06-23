@@ -7,22 +7,22 @@
  *          required: true
  *          description: |
  *              #### 유저를 등록시킬 팀의 ID와 팀에 추가할 유저의 ID가 필요합니다.
- *              - teamId - 유저를 추가하고자 하는 팀 ID
- *              - userId - 팀에 추가하고자 하는 유저의 ID
+ *              - teamID - 유저를 추가하고자 하는 팀 ID
+ *              - userID - 팀에 추가하고자 하는 유저의 ID
  *          content:
  *              application/json:
  *                  schema:
  *                      type: object
  *                      properties:
- *                          teamId:
+ *                          teamID:
  *                              type: string
  *                              required: true
- *                          userId:
+ *                          userID:
  *                              type: string
  *                              required: true
  *                      example:
- *                          "teamId": "1"
- *                          "userId": "hyeokim"
+ *                          "teamID": "1"
+ *                          "userID": "hyeokim"
  *      responses:
  *          200:
  *              description: |
@@ -34,10 +34,10 @@
  *                      - memberID : 팀에 속해있는 유저들의 ID 리스트 </br>
  *                      - subject : 현재 팀이 진행하고 있는 과제 </br>
  *                      - state : 팀의 현재 상태 </br>
- *                          - progress : 매칭이 완료되어 프로젝트 진행 중인 상태</br>
- *                          - end : 프로젝트가 종료된 상태</br>
- *                          - less_member : 팀 멤버 수가 적은 상태로 매칭된 상태</br>
- *                          - wait_member : 팀 멤버를 기다리는 중인 상태 </br>
+ *                          - progress : 팀 멤버가 3명 이상이 되어 정상적으로 진행 중입니다.</br>
+ *                          - end : 팀의 학습이 종료되어 팀이 닫혔습니다.</br>
+ *                          - less_member : 팀 멤버가 3명 미만으로 진행중이고 추가 멤버를 받지 않는 상태입니다</br>
+ *                          - wait_member : 팀 멤버가 3명 미만으로 진행중이고 추가 멤버를 받는 상태입니다.
  *                      - startDate : 팀이 생성된 날짜 정보 </br>
  *                      - notionLink : 팀에게 제공되는 노션 페이지의 링크 </br>
  *                      - gitLink : 팀에게 제공되는 Github 저장소의 링크 </br>
@@ -65,8 +65,8 @@
  *          400:
  *              description: |
  *                  잘못된 요청으로 인해 멤버 추가 요청 실패 </br>
- *                  - 유효하지 않은 teamId 값이 들어온 경우 </br>
- *                  - 유효하지 않은 userId 값이 들어온 경우</br>
+ *                  - 유효하지 않은 teamID 값이 들어온 경우 </br>
+ *                  - 유효하지 않은 userID 값이 들어온 경우</br>
  *                  - 팀 멤버 리스트에 이미 해당 유저가 존재하는 경우 </br>
  *                  - 팀의 상태가 "wait_member"가 아닌 경우
  *              content:
