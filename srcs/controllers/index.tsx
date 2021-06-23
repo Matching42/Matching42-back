@@ -4,3 +4,4 @@ export { default as addUser2Team } from './controller.addUser2Team';
 export { default as addUser2WaitList } from './controller.addUser2Waitlist';
 export { default as getTeam } from './controller.getTeam';
 export { default as removeUser2WaitList } from './controller.removeUser2WaitList';
+export { default as createGitRepo } from './controller.creatGitRepo';
