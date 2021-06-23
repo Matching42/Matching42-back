@@ -6,17 +6,16 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    intraInfo: [
-        {
-            blackholed_at: {
-                type: String,
-            },
-            level: {
-                type: Number,
-                required: true,
-            },
+    intraInfo: {
+        blackholed_at: {
+            type: Date,
+            default: null,
         },
-    ],
+        level: {
+            type: Number,
+            required: true,
+        },
+    },
     waitMatching: {
         type: String,
         default: null,
@@ -25,7 +24,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: null,
     },
-    gitID: {
+    gitName: {
         type: String,
         default: null,
     },
