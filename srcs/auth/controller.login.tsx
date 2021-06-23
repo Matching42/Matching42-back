@@ -1,4 +1,4 @@
-import { RequestHandler, Request, Response } from 'express';
+import { RequestHandler } from 'express';
 import axios from 'axios';
 import signup from './controller.signup';
 import { generateToken, getToken, decodeToken } from './auth.jwt';
@@ -9,7 +9,7 @@ dotenv.config();
 /*
     TODO: set User from 42 type
 */
-const fail = (req: Request, res: Response): void => {
+const fail: RequestHandler = (req, res) => {
     res.status(401).send({
         success: false,
         message: 'User auth failed in 42',
@@ -24,6 +24,7 @@ const login: RequestHandler = (req, res) => {
         );
     }
     const decode = decodeToken(token);
+
     if (!decode) {
         return res.redirect(
             `https://api.intra.42.fr/oauth/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.RETURN_URI}&response_type=code`
@@ -34,15 +35,21 @@ const login: RequestHandler = (req, res) => {
 
 const granted: RequestHandler = async (req, res) => {
     const { code } = req.query;
+
     try {
-        const data = await axios.post('https://api.intra.42.fr/oauth/token', {
-            grant_type: 'authorization_code',
-            client_id: process.env.CLIENT_ID,
-            client_secret: process.env.CLIENT_SECRET,
-            code: code,
-            redirect_uri: process.env.RETURN_URI,
+        const data = await axios({
+            url: 'https://api.intra.42.fr/oauth/token',
+            method: 'post',
+            data: {
+                grant_type: 'authorization_code',
+                client_id: process.env.CLIENT_ID,
+                client_secret: process.env.CLIENT_SECRET,
+                code: code,
+                redirect_uri: process.env.RETURN_URI,
+            },
         });
         const userFrom42 = await getUserFrom42(data.data.access_token as string);
+        console.log('2');
         if (userFrom42.cursus_users.length < 2) {
             res.status(400).send({
                 success: false,
