@@ -28,5 +28,5 @@
             }
         ]
     },
-    "ignorePatterns": "jest.config.js"
+    "ignorePatterns": [ "jest.config.js", "@types/*"]
 }
