@@ -10,7 +10,7 @@
  *                  user:
  *                      type: array
  *                      items:
- *                          tpye: object
+ *                          type: object
  *                          properties:
  *                              userID:
  *                                  type: string
