@@ -22,4 +22,5 @@
  *                      type: string
  *                  cluster:
  *                      type: string
+ *                      enum: ['개포', '서초', null]
  */
