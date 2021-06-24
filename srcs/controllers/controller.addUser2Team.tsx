@@ -3,8 +3,8 @@ import { Team, User } from '../models';
 
 const addMember: RequestHandler = async (req, res) => {
     try {
-        const user = await User.findOne({ ID: req.body.userId });
-        const team = await Team.findOne({ ID: req.body.teamId });
+        const user = await User.findOne({ ID: req.body.userID });
+        const team = await Team.findOne({ ID: req.body.teamID });
 
         if (user === null) throw new Error('Invalid User ID');
         if (team === null) throw new Error('Invalid Team ID');

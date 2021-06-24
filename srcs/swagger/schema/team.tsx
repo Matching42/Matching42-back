@@ -12,9 +12,12 @@
  *                  memberID:
  *                      type: array
  *                      items:
- *                          type: string
+ *                        type: string
  *                  subject:
  *                      type: string
+ *                  state:
+ *                      type: string
+ *                      enum: [progress, end, less_member, wait_member]
  *                  startDate:
  *                      type: date
  *                  notionLink:

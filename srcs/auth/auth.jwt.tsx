@@ -1,10 +1,11 @@
 import * as jwt from 'jsonwebtoken';
+import { Request } from 'express';
 
-const generateToken = (user): string => {
+const generateToken = (user: string): string => {
     return jwt.sign({ user }, process.env.JWT as string, { expiresIn: '6h' });
 };
 /* TODO: change any to other */
-const getToken = (req: any): string | undefined => {
+const getToken = (req: Request): string | undefined => {
     const authField = req.headers['authorization'] as string; /* why it change small case??? */
     if (!authField) return undefined;
     if (authField.split(' ')[0] !== 'Bearer') return undefined;
