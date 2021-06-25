@@ -26,7 +26,7 @@ router.post('/waitlist', controller.addUser2WaitList);
 router.delete('/waitlist/:userID', controller.removeUser2WaitList);
 router.post('/addmember', controller.addUser2Team);
 router.get('/team', controller.getTeam);
-router.get('/team/:teamId', controller.getTeam);
+router.get('/team/:teamID', controller.getTeam);
 router.patch('/team/:teamID', controller.updateTeamState);
 router.post('/team/creategitrepo/:teamID', controller.createGitRepo);
 
