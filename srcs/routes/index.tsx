@@ -4,7 +4,6 @@ import * as controller from '../controllers';
 import { fail, login, granted } from '../auth';
 import swaggerSpec from '../swagger/option';
 import axios from 'axios';
-import { Team } from '../models';
 const router = Router();
 /*
     Set your router, but must check order of router
@@ -28,10 +27,5 @@ router.get('/team', controller.getTeam);
 router.get('/team/:teamId', controller.getTeam);
 router.patch('/team/:teamID', controller.updateTeamState);
 router.post('/team/creategitrepo/:teamID', controller.createGitRepo);
-
-router.post('/team', async (req, res) => {
-    const team = await Team.create(req.body);
-    res.json({ team });
-});
 
 export default router;
