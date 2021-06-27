@@ -3,8 +3,8 @@ import { Team } from '../models';
 
 const getTeam: RequestHandler = async (req, res) => {
     try {
-        const teamId = req.params.teamId;
-        if (!teamId) {
+        const teamID = req.params.teamID;
+        if (!teamID) {
             let limit = 5;
             let page = 0;
 
@@ -29,7 +29,7 @@ const getTeam: RequestHandler = async (req, res) => {
                 data: pageTeams,
             });
         } else {
-            const team = await Team.findOne({ ID: teamId });
+            const team = await Team.findOne({ ID: teamID });
             res.status(200).json({
                 sucess: true,
                 data: team,
