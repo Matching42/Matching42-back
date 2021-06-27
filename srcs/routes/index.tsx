@@ -4,7 +4,6 @@ import * as controller from '../controllers';
 import { fail, login, granted } from '../auth';
 import swaggerSpec from '../swagger/option';
 import axios from 'axios';
-
 const router = Router();
 /*
     Set your router, but must check order of router
@@ -18,7 +17,6 @@ router.get('/login/redirect', granted);
 router.get('/login/fail', fail);
 
 //router.use(isAuth);
-router.patch('/team/:teamid', controller.updateTeamState);
 router.get('/user', controller.getUser);
 router.get('/user/:userID', controller.getUser);
 router.get('/waitlist', controller.getWaitlist);
