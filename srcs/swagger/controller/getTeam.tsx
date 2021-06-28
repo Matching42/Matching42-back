@@ -20,6 +20,18 @@
  *          type: integer
  *          default: 0
  *          minimum: 0
+ *      - in: query
+ *        name: progress
+ *        description: 값을 true로 줄 경우, 팀원 부족에 상관 없이 현재 진행중인 팀들만 반환합니다. state가 end가 아닌 팀들만 반환됩니다.
+ *        required: false
+ *        schema:
+ *          type: string
+ *      - in: query
+ *        name: subject
+ *        description: 특정 subject를 값으로 줄 경우, 그와 일치하는 subject를 가진 팀만 반환됩니다.
+ *        required: false
+ *        schema:
+ *          type: string
  *      responses:
  *          200:
  *              description: 팀 데이터 배열을 반환합니다. 팀 데이터 배열 범위 밖에 데이터를 요청했다면 빈 배열을 반환합니다. 범위는 [page * limit, page * limit + limit]입니다.
