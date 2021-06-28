@@ -7,7 +7,6 @@ const getTeam: RequestHandler = async (req, res) => {
         if (!teamID) {
             let limit = 5;
             let page = 0;
-
             if (req.query.limit) {
                 limit = parseInt(req.query.limit as string);
             }
@@ -15,6 +14,20 @@ const getTeam: RequestHandler = async (req, res) => {
                 page = parseInt(req.query.page as string);
             }
             const allTeams = await Team.find({});
+            if (req.query.progress as string === 'true') {
+                for (let i = allTeams.length - 1; i >= 0; i--) {
+                    if (allTeams[i].state === 'end') {
+                        allTeams.splice(i, 1);
+                    }
+                }
+            }
+            if (req.query.subject) {
+                for (let i = allTeams.length - 1; i >= 0; i--) {
+                    if (allTeams[i].subject !== req.query.subject) {
+                            allTeams.splice(i, 1);
+                    }
+                }
+            }
             if (!req.query.page && !req.query.limit) {
                 res.status(200).json({
                     success: true,
