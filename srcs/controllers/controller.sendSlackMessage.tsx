@@ -10,6 +10,7 @@ const channelID = process.env.SLACK_CHANNEL_ID;
 const sendSlackMessage: RequestHandler = async (req, res) => {
     try {
         const team = await Team.findOne({ ID: req.body.teamID });
+        if (team === null || team === undefined) throw new Error('This teamID does not exist.');
 
         let msg =
             team.subject +
@@ -32,9 +33,10 @@ const sendSlackMessage: RequestHandler = async (req, res) => {
             data: {
                 text: msg,
                 channel: channelID,
-                link_names: false,
+                link_names: true,
             },
         });
+        if (!sendMsg.data.ok) throw new Error(sendMsg.data.error);
 
         res.json({
             success: true,
