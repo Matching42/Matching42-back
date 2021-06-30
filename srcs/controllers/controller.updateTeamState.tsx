@@ -1,11 +1,16 @@
 import { RequestHandler } from 'express';
 import { Team } from '../models';
 
+const checkError = (team, teamID, state) => {
+    if (state === undefined) throw new Error('state value is missing');
+    else if (team === null)
+        throw new Error(`teamID params :'${teamID}'. no such teamID in database.`);
+};
+
 const updateTeamState: RequestHandler = async (req, res) => {
     try {
         let team = await Team.findOne({ ID: req.params.teamID });
-        if (req.body.state === undefined || team === null)
-            throw new Error('no such team id or state');
+        checkError(team, req.params.teamID, req.body.state);
         await Team.updateOne(
             { ID: req.params.teamID },
             { state: req.body.state },
