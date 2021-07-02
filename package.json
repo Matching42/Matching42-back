@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Matching42/Matching42-back#readme",
   "dependencies": {
+    "@notionhq/client": "^0.2.0",
     "@types/axios": "^0.14.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.10",
