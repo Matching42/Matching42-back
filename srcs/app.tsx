@@ -15,7 +15,7 @@ app.use(cookieParser());
 app.use(session({ resave: false, saveUninitialized: false, secret: 'asfsa' }));
 app.use(
     cors({
-        origin: process.env.CLIENT_URI,
+        origin: [process.env.CLIENT_URI as string, process.env.REAL_URI as string],
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
         credentials: true,
     })
