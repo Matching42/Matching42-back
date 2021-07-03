@@ -3,7 +3,7 @@ import swaggerUI from 'swagger-ui-express';
 import * as controller from '../controllers';
 import { fail, login, granted } from '../auth';
 import swaggerSpec from '../swagger/option';
-import axios from 'axios';
+
 const router = Router();
 /*
     Set your router, but must check order of router
@@ -27,5 +27,6 @@ router.get('/team', controller.getTeam);
 router.get('/team/:teamID', controller.getTeam);
 router.patch('/team/:teamID', controller.updateTeamState);
 router.post('/team/creategitrepo/:teamID', controller.createGitRepo);
+router.post('/team/invitetorepo/:teamID/:userID?', controller.inviteToRepo);
 
 export default router;
