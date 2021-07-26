@@ -26,7 +26,7 @@
  *                      type: string
  *                  teamName:
  *                      type: string
- *                  explain:
+ *                  description:
  *                      type: string
  *                  tag:
  *                      type: array
