@@ -26,4 +26,10 @@
  *                      type: string
  *                  teamName:
  *                      type: string
+ *                  explain:
+ *                      type: string
+ *                  tag:
+ *                      type: array
+ *                      items:
+ *                          type: string
  */
