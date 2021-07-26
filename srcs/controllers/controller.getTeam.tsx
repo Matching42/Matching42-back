@@ -23,11 +23,9 @@ const getTeam: RequestHandler = async (req, res) => {
                 });
             }
             if (req.query.subject) {
-                for (let i = allTeams.length - 1; i >= 0; i--) {
-                    if (allTeams[i].subject !== req.query.subject) {
-                        allTeams.splice(i, 1);
-                    }
-                }
+                allTeams = allTeams.filter((team) => {
+                    return team.subject === req.query.subject;
+                });
             }
             if (!req.query.page && !req.query.limit) {
                 res.status(200).json({
