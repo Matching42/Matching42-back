@@ -5,6 +5,7 @@ const getTeam: RequestHandler = async (req, res) => {
     try {
         const teamID = req.params.teamID;
         if (!teamID) {
+            //나중에 충돌할 코드 범위
             let limit = 5;
             let page = 0;
 
@@ -14,13 +15,12 @@ const getTeam: RequestHandler = async (req, res) => {
             if (req.query.page) {
                 page = parseInt(req.query.page as string);
             }
-            const allTeams = await Team.find({});
+            //
+            let allTeams = await Team.find({});
             if ((req.query.progress as string) === 'true') {
-                for (let i = allTeams.length - 1; i >= 0; i--) {
-                    if (allTeams[i].state === 'end') {
-                        allTeams.splice(i, 1);
-                    }
-                }
+                allTeams = allTeams.filter((team) => {
+                    return team.state !== 'end';
+                });
             }
             if (req.query.subject) {
                 for (let i = allTeams.length - 1; i >= 0; i--) {
