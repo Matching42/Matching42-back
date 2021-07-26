@@ -31,6 +31,7 @@ const removeUser2Waitlist: RequestHandler = async (req, res) => {
             { ID: req.params.userID },
             {
                 waitMatching: null,
+                deadline: null,
             },
             { new: true, runValidators: true }
         ).exec();
