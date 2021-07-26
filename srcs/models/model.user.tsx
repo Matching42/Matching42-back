@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
     },
     deadline: {
         type: String,
-        enum: ['3일', '1주', '2주', '4주', '6중 이상', null],
+        enum: ['3일', '1주', '2주', '4주', '6주 이상', null],
         default: null,
     },
 });
