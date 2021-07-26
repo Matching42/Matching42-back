@@ -24,6 +24,8 @@ const teamSchema = new Schema({
     notionLink: { type: String, unique: true },
     gitLink: { type: String, unique: true },
     teamName: { type: String, unique: true },
+    explain: {type: String},
+    tag: [{type: String}],
 });
 
 export default mongoose.model('team', teamSchema, 'Team');
