@@ -6,33 +6,32 @@ import { Team, User } from '../models';
 dotenv.config();
 
 const checkTeamError = (team, teamID, userID) => {
-    if (!team) throw new Error('There is no such Team');
+    if (team === null || team === undefined) throw new Error('There is no such Team');
     if (userID && !team.memberID.includes(userID))
         throw new Error(`user: ${userID} is not memeber of team : ${teamID}`);
     if (team.state === 'end') throw new Error('Team already finished this subject');
-    if (!teamID) throw new Error('teamID is undefined');
-    if (!team.gitLink) throw new Error('Team does not have gitLink');
+    if (teamID === null || teamID === undefined) throw new Error('teamID is Required');
+    if (team.gitLink === null && team.gitLink === undefined)
+        throw new Error('Team does not have gitLink');
 };
 
 const checkUserError = async (user) => {
-    if (!user) throw new Error('no such User');
-    if (!user.gitName) throw new Error('User does not have gitID');
-    if (!(await isUserExist(user.gitName)))
-        throw new Error(`User:${user.gitName} does not Exist in github`);
+    if (user === null || user === undefined) throw new Error('no such User');
+    if (user.gitName === null || user.gitName === undefined)
+        throw new Error('User does not have gitID');
+    await isGitNameExist(user.gitName);
 };
 
 const checkResult = async (result, memberID) => {
-    let isOK = true;
-    let eMessage = {};
+    const eMessage = {};
 
-    for (let i of memberID) {
+    for (const i of memberID) {
         if (!result[i].success) {
             eMessage[i] = result[i].error.message;
-            isOK = false;
         }
     }
 
-    if (!isOK) throw { name: 'Error', message: eMessage };
+    if (Object.keys(eMessage).length != 0) throw { name: 'Error', message: eMessage };
 };
 
 const isLinkExist = async (gitRepoName) => {
@@ -46,23 +45,21 @@ const isLinkExist = async (gitRepoName) => {
             },
         });
     } catch (e) {
-        return false;
+        throw new Error(`team repository : ${gitRepoName} does not exist in github`);
     }
-    return true;
 };
 
-const isUserExist = async (gitName) => {
+const isGitNameExist = async (gitName) => {
     try {
         await axios.get(`https://api.github.com/users/${gitName}`);
-        return true;
     } catch (e) {
-        return false;
+        throw new Error(`User:${gitName} does not Exist in github`);
     }
 };
 
 const sendInvitation = async (gitRepoName, memberID) => {
     const result = {};
-    for (let userID of memberID) {
+    for (const userID of memberID) {
         try {
             const user = await User.findOne({ ID: userID });
             await checkUserError(user);
@@ -97,16 +94,14 @@ const inviteToRepo: RequestHandler = async (req, res) => {
     try {
         const team = await Team.findOne({ ID: req.params.teamID });
         checkTeamError(team, req.params.teamID, req.params.userID);
-        const gitLinkSplit = team.gitLink.split('/');
-        const gitRepoName = gitLinkSplit[gitLinkSplit.length - 1];
-        if (!(await isLinkExist(gitRepoName)))
-            throw new Error(`team repository : ${gitRepoName} does not exist in github`);
-        let memberID: Array<string> =
+        let gitRepoName = team.gitLink.split('/');
+        gitRepoName = gitRepoName[gitRepoName.length - 1];
+        await isLinkExist(gitRepoName);
+        const memberID: Array<string> =
             req.params.userID === undefined ? team.memberID : [req.params.userID];
-
         const result = await sendInvitation(gitRepoName, memberID);
         await checkResult(result, memberID);
-        res.json({
+        res.status(200).json({
             success: true,
         });
     } catch (e) {

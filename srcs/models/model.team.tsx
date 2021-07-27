@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 mongoose.set('useCreateIndex', true);
+mongoose.set('useFindAndModify', false);
 
 enum TeamState {
     'progress',
