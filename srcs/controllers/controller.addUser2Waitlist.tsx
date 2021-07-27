@@ -12,7 +12,7 @@ const addUser2Waitlist: RequestHandler = async (req, res) => {
             throw new Error('This userID does not exist.');
 
         const WaitlistDocument = await findAllWaitlist(req.body.subjectName);
-        if (WaitlistDocument === undefined) throw new Error('Invalid subjectName');
+        if (WaitlistDocument instanceof Error) throw WaitlistDocument;
 
         for (let i = 0; i < WaitlistDocument.user.length; i++) {
             if (WaitlistDocument.user[i].userID === req.body.userID)
