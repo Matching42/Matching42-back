@@ -4,7 +4,7 @@ import { Team } from '../models';
 const getTeam: RequestHandler = async (req, res) => {
     try {
         const teamID = req.params.teamID;
-        if (!teamID) {
+        if (teamID === undefined || teamID === null) {
             let limit = 5;
             let page = 0;
 
@@ -14,7 +14,7 @@ const getTeam: RequestHandler = async (req, res) => {
             if (req.query.page) {
                 page = parseInt(req.query.page as string);
             }
-            const allTeams = await Team.find({});
+            let allTeams = await Team.find({});
             if ((req.query.progress as string) === 'true') {
                 for (let i = allTeams.length - 1; i >= 0; i--) {
                     if (allTeams[i].state === 'end') {
@@ -29,28 +29,24 @@ const getTeam: RequestHandler = async (req, res) => {
                     }
                 }
             }
-            if (!req.query.page && !req.query.limit) {
-                res.status(200).json({
-                    success: true,
-                    data: allTeams,
-                });
-                return;
+            if (
+                req.query.page !== undefined ||
+                req.query.limit !== undefined ||
+                req.query.page !== null ||
+                req.query.limit !== null
+            ) {
+                allTeams = allTeams.slice(limit * page, limit * page + limit);
             }
-            const pageTeams: Array<string> = [];
-            for (let i = 0; i < limit && allTeams[i + limit * page]; i++)
-                pageTeams.push(allTeams[i + limit * page]);
             res.status(200).json({
                 success: true,
-                data: pageTeams,
+                data: allTeams,
             });
-            return;
         } else {
             const team = await Team.findOne({ ID: teamID });
             res.status(200).json({
                 sucess: true,
                 data: team,
             });
-            return;
         }
     } catch (e) {
         res.status(400).json({
@@ -60,7 +56,6 @@ const getTeam: RequestHandler = async (req, res) => {
                 message: e.message,
             },
         });
-        return;
     }
 };
 
