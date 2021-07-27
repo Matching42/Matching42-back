@@ -4,7 +4,7 @@ import { User } from '../models';
 const getUser: RequestHandler = async (req, res) => {
     try {
         const userID = req.params.userID;
-        if (!userID) {
+        if (userID === undefined) {
             const allUsers = await User.find({});
             res.status(200).json({
                 success: true,
