@@ -8,7 +8,7 @@ const findAllWaitlist: (subjectName: string) => Promise<tWaitlist | Error> = asy
         const WaitlistDocument = await Waitlist.findOne({
             subjectName: subjectName,
         });
-        if (WaitlistDocument == null || WaitlistDocument == undefined)
+        if (WaitlistDocument === null || WaitlistDocument === undefined)
             throw new Error('Invalid subjectName');
         return WaitlistDocument;
     } catch (error) {
