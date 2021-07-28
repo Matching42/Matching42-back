@@ -26,6 +26,7 @@ export declare type tTeam = {
 
 export declare type tWaitlist = {
     _id: string
+    subjectName: string
     user: {
         userID: string
         waitedAt: Date

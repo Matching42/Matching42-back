@@ -1,5 +1,6 @@
 import { RequestHandler } from 'express';
 import { User, Waitlist } from '../models';
+import { findAllWaitlist } from '../lib';
 
 const removeUser2Waitlist: RequestHandler = async (req, res) => {
     try {
@@ -9,12 +10,9 @@ const removeUser2Waitlist: RequestHandler = async (req, res) => {
         if (UserDocument.waitMatching === null)
             throw new Error('This userID not registered in any subject');
 
-        const WaitlistDocument = await Waitlist.findOne({
-            subjectName: UserDocument.waitMatching,
-        }).exec();
-        if (WaitlistDocument === null || WaitlistDocument === undefined)
-            throw new Error('This subjectName does not exist.');
-        let WaitlistUserInfo = null;
+        const WaitlistDocument = await findAllWaitlist(UserDocument.waitMatching);
+
+        let WaitlistUserInfo = {};
         for (let i = 0; i < WaitlistDocument.user.length; i++) {
             if (WaitlistDocument.user[i].userID === req.params.userID) {
                 WaitlistUserInfo = WaitlistDocument.user[i];
