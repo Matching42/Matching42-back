@@ -13,7 +13,7 @@ const getTeam: RequestHandler = async (req, res) => {
                 req.query.page === undefined || req.query.page === null
                     ? 0
                     : parseInt(req.query.page as string);
-            const allTeams = await Team.find({});
+            let allTeams = await Team.find({});
             if ((req.query.progress as string) === 'true') {
                 allTeams = allTeams.filter((team) => {
                     return team.state !== 'end';
