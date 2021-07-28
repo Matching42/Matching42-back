@@ -13,20 +13,16 @@ const getTeam: RequestHandler = async (req, res) => {
                 req.query.page === undefined || req.query.page === null
                     ? 0
                     : parseInt(req.query.page as string);
-            const allTeams = await Team.find({});
+            let allTeams = await Team.find({});
             if ((req.query.progress as string) === 'true') {
-                for (let i = allTeams.length - 1; i >= 0; i--) {
-                    if (allTeams[i].state === 'end') {
-                        allTeams.splice(i, 1);
-                    }
-                }
+                allTeams = allTeams.filter((team) => {
+                    return team.state !== 'end';
+                });
             }
             if (req.query.subject) {
-                for (let i = allTeams.length - 1; i >= 0; i--) {
-                    if (allTeams[i].subject !== req.query.subject) {
-                        allTeams.splice(i, 1);
-                    }
-                }
+                allTeams = allTeams.filter((team) => {
+                    return team.subject === req.query.subject;
+                });
             }
             if (!req.query.page && !req.query.limit) {
                 res.status(200).json({
