@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import axios from 'axios';
 import { User, Waitlist } from '../models';
-import { findAllWaitlist } from '../lib';
+import { findOneWaitlist } from '../lib';
 
 const addUser2Waitlist: RequestHandler = async (req, res) => {
     try {
@@ -11,7 +11,7 @@ const addUser2Waitlist: RequestHandler = async (req, res) => {
         if (UserDocument === null || UserDocument === undefined)
             throw new Error('This userID does not exist.');
 
-        const WaitlistDocument = await findAllWaitlist(req.body.subjectName);
+        const WaitlistDocument = await findOneWaitlist(req.body.subjectName);
 
         for (let i = 0; i < WaitlistDocument.user.length; i++) {
             if (WaitlistDocument.user[i].userID === req.body.userID)
