@@ -31,13 +31,12 @@ const createGitRepo: RequestHandler = async (req, res) => {
         });
         const gitUrl = createResult.data.html_url;
         if (gitUrl === undefined) throw new Error('git Repository creation failed');
-        await Team.updateOne(
+        team = await Team.findOneAndUpdate(
             { ID: req.params.teamID },
             { gitLink: gitUrl },
-            { runValidators: true }
+            { runValidators: true, new: true }
         );
-        team = await Team.findOne({ ID: req.params.teamID });
-        res.json({
+        res.status(200).json({
             success: true,
             team,
         });
