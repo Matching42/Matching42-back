@@ -11,7 +11,6 @@ const removeUser2Waitlist: RequestHandler = async (req, res) => {
             throw new Error('This userID not registered in any subject');
 
         const WaitlistDocument = await findAllWaitlist(UserDocument.waitMatching);
-        if (WaitlistDocument instanceof Error) throw WaitlistDocument;
 
         let WaitlistUserInfo = {};
         for (let i = 0; i < WaitlistDocument.user.length; i++) {
