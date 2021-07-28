@@ -4,8 +4,7 @@ import { User } from '../models';
 const getUser: RequestHandler = async (req, res) => {
     try {
         const userID = req.params.userID;
-        if (userID === null) throw new Error('Invalid User ID');
-        if (userID === undefined) {
+        if (!userID) {
             const allUsers = await User.find({});
             res.status(200).json({
                 success: true,

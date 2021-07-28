@@ -6,5 +6,3 @@ export { default as getTeam } from './controller.getTeam';
 export { default as removeUser2WaitList } from './controller.removeUser2WaitList';
 export { default as createGitRepo } from './controller.creatGitRepo';
 export { default as getWaitlist } from './controller.getWaitlist';
-export { default as sendSlackMessage } from './controller.sendSlackMessage';
-export { default as inviteToRepo } from './controller.inviteToRepo';

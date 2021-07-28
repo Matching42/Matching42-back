@@ -26,10 +26,4 @@
  *                      type: string
  *                  teamName:
  *                      type: string
- *                  description:
- *                      type: string
- *                  tag:
- *                      type: array
- *                      items:
- *                          type: string
  */
