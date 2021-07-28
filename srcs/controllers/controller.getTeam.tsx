@@ -24,28 +24,24 @@ const getTeam: RequestHandler = async (req, res) => {
                     return team.subject === req.query.subject;
                 });
             }
-            if (!req.query.page && !req.query.limit) {
-                res.status(200).json({
-                    success: true,
-                    data: allTeams,
-                });
-                return;
+            if (
+                req.query.page !== undefined ||
+                req.query.limit !== undefined ||
+                req.query.page !== null ||
+                req.query.limit !== null
+            ) {
+                allTeams = allTeams.slice(limit * page, limit * page + limit);
             }
-            const pageTeams: Array<string> = [];
-            for (let i = 0; i < limit && allTeams[i + limit * page]; i++)
-                pageTeams.push(allTeams[i + limit * page]);
             res.status(200).json({
                 success: true,
-                data: pageTeams,
+                data: allTeams,
             });
-            return;
         } else {
             const team = await Team.findOne({ ID: teamID });
             res.status(200).json({
                 sucess: true,
                 data: team,
             });
-            return;
         }
     } catch (e) {
         res.status(400).json({
@@ -55,7 +51,6 @@ const getTeam: RequestHandler = async (req, res) => {
                 message: e.message,
             },
         });
-        return;
     }
 };
 
