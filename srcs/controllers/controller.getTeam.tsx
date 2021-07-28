@@ -4,30 +4,25 @@ import { Team } from '../models';
 const getTeam: RequestHandler = async (req, res) => {
     try {
         const teamID = req.params.teamID;
-        if (teamID === undefined || teamID === null) {
-            let limit = 5;
-            let page = 0;
-
-            if (req.query.limit) {
-                limit = parseInt(req.query.limit as string);
-            }
-            if (req.query.page) {
-                page = parseInt(req.query.page as string);
-            }
+        if (!teamID) {
+            const limit =
+                req.query.limit === undefined || req.query.limit === null
+                    ? 5
+                    : parseInt(req.query.limit as string);
+            const page =
+                req.query.page === undefined || req.query.page === null
+                    ? 0
+                    : parseInt(req.query.page as string);
             let allTeams = await Team.find({});
             if ((req.query.progress as string) === 'true') {
-                for (let i = allTeams.length - 1; i >= 0; i--) {
-                    if (allTeams[i].state === 'end') {
-                        allTeams.splice(i, 1);
-                    }
-                }
+                allTeams = allTeams.filter((team) => {
+                    return team.state !== 'end';
+                });
             }
             if (req.query.subject) {
-                for (let i = allTeams.length - 1; i >= 0; i--) {
-                    if (allTeams[i].subject !== req.query.subject) {
-                        allTeams.splice(i, 1);
-                    }
-                }
+                allTeams = allTeams.filter((team) => {
+                    return team.subject === req.query.subject;
+                });
             }
             if (
                 req.query.page !== undefined ||
