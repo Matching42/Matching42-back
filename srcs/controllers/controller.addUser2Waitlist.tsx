@@ -3,7 +3,7 @@ import axios from 'axios';
 import { User, Waitlist } from '../models';
 import { findOneWaitlist, findOneUser } from '../lib';
 
-const errorWaitlistCheck = (WaitlistDocument, userID, subjectName) => {
+const checkWaitlistError = (WaitlistDocument, userID, subjectName) => {
     const checkUser = WaitlistDocument.user.map((userInfo) => userInfo.userID).includes(userID);
     if (checkUser) {
         throw new Error(`The user is already registered in ${subjectName} subject`);
@@ -19,7 +19,7 @@ const addUser2Waitlist: RequestHandler = async (req, res) => {
         await findOneUser(req.body.userID);
 
         const WaitlistDocument = await findOneWaitlist(req.body.subjectName);
-        errorWaitlistCheck(WaitlistDocument, req.body.userID, req.body.subjectName);
+        checkWaitlistError(WaitlistDocument, req.body.userID, req.body.subjectName);
 
         const ChangedUser = await User.findOneAndUpdate(
             { ID: req.body.userID },
