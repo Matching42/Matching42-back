@@ -8,3 +8,4 @@ export { default as createGitRepo } from './controller.createGitRepo';
 export { default as getWaitlist } from './controller.getWaitlist';
 export { default as sendSlackMessage } from './controller.sendSlackMessage';
 export { default as inviteToRepo } from './controller.inviteToRepo';
+export { default as getSubjectPDF } from './controller.getSubjectPDF';
