@@ -3,7 +3,7 @@ import { Team } from '../models';
 import { Waitlist } from '../models';
 import { User } from '../models';
 
-const makeTeam = async (subject: String, state: String, users: Array<String>): Promise<void> => {
+const makeTeam = async (subject: string, state: string, users: Array<string>): Promise<void> => {
     await new Team({
         ID: `${subject}_${users[0]}_${Date.now()}`,
         leaderID: users[0].userID,
