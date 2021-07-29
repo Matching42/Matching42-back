@@ -30,14 +30,14 @@ const addUser2Waitlist: RequestHandler = async (req, res) => {
                 deadline: req.body.deadline,
             },
             { new: true, runValidators: true }
-        ).exec();
+        );
 
         const SubjectUser = { userID: req.body.userID };
         const ChangedWaitlist = await Waitlist.findOneAndUpdate(
             { subjectName: req.body.subjectName },
             { $push: { user: SubjectUser } },
             { new: true, runValidators: true }
-        ).exec();
+        );
 
         res.status(200).json({
             success: true,
