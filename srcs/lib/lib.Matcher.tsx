@@ -3,19 +3,12 @@ import { Waitlist } from '../models';
 import { User } from '../models';
 
 const Matcher = async (): Promise<void> => {
-    const allWaitlist = await Waitlist.find({});
-    const matchSubject: Array<string> = [];
-    for (let i = 0; i < allWaitlist.length; i++) {
-        let flag = 0;
-        for (let j = 0; j < matchSubject.length; j++) {
-            if (matchSubject[j] === allWaitlist[i].subjectName) {
-                flag = 1;
-            }
-        }
-        if (flag === 0) {
-            matchSubject.push(allWaitlist[i].subjectName);
-        }
-    }
+    let allWaitlist = await Waitlist.find({});
+    //user 배열에 원소가 있는지로 필터링
+    //매칭해야할 인원이 있는 서브젝트만 남음
+    allWaitlist = allWaitlist.filter((list) => {
+        return list.user[0];
+    });
     for (let i = 0; i < matchSubject.length; i++) {
         const matchUser = allWaitlist.find({ subject: matchSubject[i] });
         for (let i = 0; i < matchUser.length; i++) {
