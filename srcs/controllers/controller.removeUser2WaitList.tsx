@@ -1,12 +1,10 @@
 import { RequestHandler } from 'express';
 import { User, Waitlist } from '../models';
-import { findOneWaitlist } from '../lib';
+import { findOneWaitlist, findOneUser } from '../lib';
 
 const removeUser2Waitlist: RequestHandler = async (req, res) => {
     try {
-        const UserDocument = await User.findOne({ ID: req.params.userID }).exec();
-        if (UserDocument === null || UserDocument === undefined)
-            throw new Error('This userID does not exist.');
+        const UserDocument = await findOneUser(req.body.userID);
         if (UserDocument.waitMatching === null)
             throw new Error('This userID not registered in any subject');
 
