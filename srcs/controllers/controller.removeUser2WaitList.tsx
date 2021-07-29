@@ -30,13 +30,13 @@ const removeUser2Waitlist: RequestHandler = async (req, res) => {
                 deadline: null,
             },
             { new: true, runValidators: true }
-        ).exec();
+        );
 
         const ChangedWaitlist = await Waitlist.findOneAndUpdate(
             { subjectName: WaitlistDocument.subjectName },
             { $pull: { user: WaitlistUserInfo } },
             { new: true, runValidators: true }
-        ).exec();
+        );
 
         res.status(200).json({
             success: true,
