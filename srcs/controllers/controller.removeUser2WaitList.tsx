@@ -19,7 +19,7 @@ const removeUser2Waitlist: RequestHandler = async (req, res) => {
         }
         if (WaitlistUserInfo === null) {
             throw new Error(
-                'This userID not registered in ' + WaitlistDocument.subjectName + 'subject'
+                `This userID not registered in ${WaitlistDocument.subjectName} subject`
             );
         }
 
