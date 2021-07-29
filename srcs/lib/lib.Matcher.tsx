@@ -4,6 +4,7 @@ import { User } from '../models';
 
 const Matcher = async (): Promise<void> => {
     let allWaitlist = await Waitlist.find({});
+    if (allWaitlist === null || allWaitlist === undefined) throw new Error('Wailist not found');
     //user 배열에 원소가 있는지로 필터링
     //매칭해야할 인원이 있는 서브젝트만 남음
     allWaitlist = allWaitlist.filter((list) => {
