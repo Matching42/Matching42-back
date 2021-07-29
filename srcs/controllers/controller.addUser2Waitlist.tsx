@@ -1,15 +1,13 @@
 import { RequestHandler } from 'express';
 import axios from 'axios';
 import { User, Waitlist } from '../models';
-import { findOneWaitlist } from '../lib';
+import { findOneWaitlist, findOneUser } from '../lib';
 
 const addUser2Waitlist: RequestHandler = async (req, res) => {
     try {
         await axios.get('https://api.github.com/users/' + req.body.gitName);
 
-        const UserDocument = await User.findOne({ ID: req.body.userID }).exec();
-        if (UserDocument === null || UserDocument === undefined)
-            throw new Error('This userID does not exist.');
+        await findOneUser(req.body.userID);
 
         const WaitlistDocument = await findOneWaitlist(req.body.subjectName);
 
