@@ -1,6 +1,21 @@
+import { Z_DATA_ERROR } from 'zlib';
 import { Team } from '../models';
 import { Waitlist } from '../models';
 import { User } from '../models';
+
+const makeTeam = async (subject: String, state: String, users: Array<String>): Promise<void> => {
+    await new Team({
+        ID: `${subject}_${users[0]}_${Date.now()}`,
+        leaderID: users[0].userID,
+        memberID: [users.userID, users.userID],
+        subject: subject,
+        state: state,
+        startDate: Date.now(),
+        notionLink: null,
+        gitLink: null,
+        teamName: `${subject}_${users[0]}_${Date.now}`,
+    }).save;
+};
 
 const Matcher = async (): Promise<void> => {
     let allWaitlist = await Waitlist.find({});
