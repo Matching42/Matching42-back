@@ -1,9 +1,8 @@
-import { Z_DATA_ERROR } from 'zlib';
 import { Team } from '../models';
 import { Waitlist } from '../models';
 import { User } from '../models';
 
-const makeTeam = async (subject: string, state: string, users: Array<string>): Promise<void> => {
+const makeTeam = async (subject: string, state: string, users): Promise<void> => {
     await new Team({
         ID: `${subject}_${users[0]}_${Date.now()}`,
         leaderID: users[0].userID,
@@ -25,15 +24,14 @@ const Matcher = async (): Promise<void> => {
     allWaitlist = allWaitlist.filter((list) => {
         return list.user[0];
     });
-    for (let i = 0; i < matchSubject.length; i++) {
-        const matchUser = allWaitlist.find({ subject: matchSubject[i] });
-        for (let i = 0; i < matchUser.length; i++) {
-            const user = await User.findOne({ ID: matchUser.user.userID });
-            matchUser[i].cluster = user.cluster;
-            if (user.cluster === null) {
-                matchUser[i].cluster = '개포';
-            }
+    //각 waitlist에 각 user별로 선호 클러스터 요청하기
+    allWaitlist.forEach(list => {
+        list.user.forEach(async (user) => {
+            user.cluster = await User.findOne({ ID: user.userID })
+            if (user.cluster === null) user.cluster = '개포';
+            });
         }
+    );
         while (matchUser.length) {
             if (
                 matchUser.length === 3 ||
