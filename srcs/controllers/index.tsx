@@ -9,4 +9,3 @@ export { default as sendSlackMessage } from './controller.sendSlackMessage';
 export { default as inviteToRepo } from './controller.inviteToRepo';
 export { default as updateTeam } from './controller.updateTeam';
 export { default as updateTeamTag } from './controller.updateTeamTag';
-export { default as getSubjectPDF } from './controller.getSubjectPDF';
