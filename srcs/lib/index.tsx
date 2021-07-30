@@ -5,3 +5,4 @@ export { default as findAllUser } from './lib.findAllUser';
 export { default as findOneWaitlist } from './lib.findOneWaitlist';
 export { default as findOneTeam } from './lib.findOneTeam';
 export { default as findAllTeam } from './lib.findAllTeam';
+export { default as sendSlackMessage } from './lib.sendSlackMessage';
