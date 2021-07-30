@@ -1,15 +1,18 @@
 import { RequestHandler } from 'express';
+import { findOneUser, findOneTeam } from '../lib';
 import { Team, User } from '../models';
 
-const addMember: RequestHandler = async (req, res) => {
-    try {
-        const user = await User.findOne({ ID: req.body.userID });
-        const team = await Team.findOne({ ID: req.body.teamID });
+const errorCheck = (user, team) => {
+    if (team.memberID.indexOf(user.ID) !== -1) throw new Error('The User already exists');
+    if (team.state !== 'wait_member') throw new Error("Can't add a member to this team");
+};
 
-        if (user === null) throw new Error('Invalid User ID');
-        if (team === null) throw new Error('Invalid Team ID');
-        if (team.memberID.indexOf(user.ID) !== -1) throw new Error('The User already exists');
-        if (team.state !== 'wait_member') throw new Error("Can't add a member to this team");
+const addUser2Team: RequestHandler = async (req, res) => {
+    try {
+        const user = await findOneUser(req.body.userID);
+        const team = await findOneTeam(req.body.teamID);
+        errorCheck(user, team);
+
         const updatedTeam = await Team.findOneAndUpdate(
             { ID: team.ID },
             { $push: { memberID: user.ID } },
@@ -36,4 +39,4 @@ const addMember: RequestHandler = async (req, res) => {
     }
 };
 
-export default addMember;
+export default addUser2Team;
