@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import axios from 'axios';
-import { Team } from '../models';
+import { findOneTeam } from './';
 import { tSlackdata } from '../../@types/types.d';
 
 dotenv.config();
@@ -24,8 +24,7 @@ const sendMsgPromise: (msg: string) => Promise<tSlackdata> = async (msg) => {
 };
 
 const sendSlackMessage: (teamID: string) => Promise<void> = async (teamID) => {
-    const team = await Team.findOne({ ID: teamID });
-    if (team === null || team === undefined) throw new Error('This teamID does not exist.');
+    const team = await findOneTeam(teamID);
 
     let msg =
         team.subject +
