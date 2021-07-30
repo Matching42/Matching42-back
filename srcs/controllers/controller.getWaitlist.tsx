@@ -4,10 +4,9 @@ import { Waitlist } from '../models';
 const getWaitlist: RequestHandler = async (req, res) => {
     try {
         const allWaitlists = await Waitlist.find({});
-        let totalWaitingNumber = 0;
-        for (let i = 0; i < allWaitlists.length; i++) {
-            totalWaitingNumber += allWaitlists[i].user.length;
-        }
+        const totalWaitingNumber = allWaitlists.reduce((sum, subject) => {
+            return sum + subject.user.length;
+        }, 0);
 
         res.status(200).json({
             success: true,
