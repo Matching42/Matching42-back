@@ -1,5 +1,6 @@
 import { RequestHandler } from 'express';
 import { Team } from '../models';
+import { findAllTeam, findOneTeam } from '../lib';
 
 const getTeam: RequestHandler = async (req, res) => {
     try {
@@ -13,7 +14,7 @@ const getTeam: RequestHandler = async (req, res) => {
                 req.query.page === undefined || req.query.page === null
                     ? 0
                     : parseInt(req.query.page as string);
-            let allTeams = await Team.find({});
+            let allTeams = await findAllTeam();
             if ((req.query.progress as string) === 'true') {
                 allTeams = allTeams.filter((team) => {
                     return team.state !== 'end';
@@ -37,7 +38,7 @@ const getTeam: RequestHandler = async (req, res) => {
                 data: allTeams,
             });
         } else {
-            const team = await Team.findOne({ ID: teamID });
+            const team = await findOneTeam(teamID);
             res.status(200).json({
                 sucess: true,
                 data: team,
