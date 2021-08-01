@@ -17,8 +17,8 @@ router.get('/login/redirect', granted);
 router.get('/login/fail', fail);
 
 //router.use(isAuth);
-router.get('/user', controller.getUser);
-router.get('/user/:userID', controller.getUser);
+router.get('/user', controller.getAllUser);
+router.get('/user/:userID', controller.getOneUser);
 router.get('/waitlist', controller.getWaitlist);
 router.post('/waitlist', controller.addUser2WaitList);
 router.delete('/waitlist/:userID', controller.removeUser2WaitList);
