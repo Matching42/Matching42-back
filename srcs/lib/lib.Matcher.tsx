@@ -1,4 +1,3 @@
-import { use } from 'passport';
 import { Team } from '../models';
 import { Waitlist } from '../models';
 import { User } from '../models';
