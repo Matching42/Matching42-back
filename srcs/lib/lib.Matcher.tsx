@@ -28,12 +28,12 @@ const updateWaitlist = async (list, userList): Promise<void> => {
         user.userInfo = undefined;
         user.cluster = undefined;
         await Waitlist.updateOne({ subjectName: list.subjectName }, { $pull: { user: user } });
-    };
-});
+    });
+};
 
 const genTeamName = (subject: string, user: string): string => {
     return `${subject}_${user}_${Date.now()}`;
-} 
+};
 
 const Matcher = async (): Promise<void> => {
     let allWaitlist = await Waitlist.find({});
