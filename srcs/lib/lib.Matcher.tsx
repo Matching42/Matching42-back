@@ -19,15 +19,18 @@ const makeTeam = async (subject: string, state: string, user, teamID): Promise<v
 };
 
 const updateUser = (userID: string[], teamName: string) => {
-    console.log(userID, teamName);
     userID.forEach(async (Id) => {
         await User.updateOne({ ID: Id }, { $set: { waitMatching: null, teamID: teamName } });
     });
 };
 
 const updateWaitlist = async (list, userList): Promise<void> => {
-    await Waitlist.updateMany({ subjectName: list.subject }, { $pop: { user: userList } });
-};
+    userList.forEach(async (user) => {
+        user.userInfo = undefined;
+        user.cluster = undefined;
+        await Waitlist.updateOne({ subjectName: list.subjectName }, { $pull: { user: user } });
+    };
+});
 
 const genTeamName = (subject: string, user: string): string => {
     return `${subject}_${user}_${Date.now()}`;
@@ -54,8 +57,8 @@ const Matcher = async (): Promise<void> => {
         while (list.user.length > 0) {
             let userID: string[];
             let teamName: string;
-            //매칭 할 인원이 총 세명일 때
-            //매칭할 인원의 선호 클러스터가 2 : 2 일 때
+            // 매칭 할 인원이 총 세명일 때
+            // 매칭할 인원의 선호 클러스터가 2 : 2 일 때
             if (
                 list.user.length === 3 ||
                 (list.user.filter((user) => user.cluster === '개포').length === 2 &&
@@ -63,11 +66,11 @@ const Matcher = async (): Promise<void> => {
             ) {
                 userID = list.user.slice(0, 3).map((user) => user.userID);
                 teamName = genTeamName(list.subjectName, userID[0]);
-                makeTeam(list.subjectName, 'progress', userID, teamName);
-                updateUser(userID, teamName);
+               makeTeam(list.subjectName, 'progress', userID, teamName);
+               updateUser(userID, teamName);
                 updateWaitlist(list, list.user.slice(0, 3));
                 list.user.splice(0, 3);
-            }
+            // }
             //매칭 할 인원이 1, 2명 일때
             else if (list.user.length === 2 || list.user.length === 1) {
                 userID = list.user.map((user) => user.userID);
