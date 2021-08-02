@@ -16,6 +16,7 @@ const getTeam: RequestHandler = async (req, res) => {
                 : parseInt(req.query.page as string);
             let allTeams = await findAllTeam();
             if ((req.query.progress as string) === 'true') {
+                //hotfix findAllTeam 반환값 타입 변경
                 allTeams = allTeams.filter((team) => {
                     return team.state !== 'end';
                 });
