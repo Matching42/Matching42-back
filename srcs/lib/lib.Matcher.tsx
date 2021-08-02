@@ -3,7 +3,7 @@ import { Waitlist } from '../models';
 import { User } from '../models';
 
 const makeTeam = async (subject: string, state: string, user, teamID): Promise<void> => {
-    await new Team({
+    const team = new Team({
         ID: teamID,
         leaderID: user[0],
         memberID: user,
@@ -13,7 +13,8 @@ const makeTeam = async (subject: string, state: string, user, teamID): Promise<v
         notionLink: null,
         gitLink: null,
         teamName: teamID,
-    }).save;
+    });
+    await team.save();
 };
 
 const updateUser = async (userID: string[], teamName: string): Promise<void> => {
@@ -24,7 +25,7 @@ const updateWaitlist = async (list, userList): Promise<void> => {
     await Waitlist.updateMany({ subjectName: list.subject }, { $pop: { user: userList } });
 };
 
-const genTeamName = (subject:string, user:string): string => {
+const genTeamName = (subject: string, user: string): string => {
     return `${subject}_${user}_${Date.now()}`;
 } 
 
@@ -58,7 +59,7 @@ const Matcher = async (): Promise<void> => {
             ) {
                 userID = list.user.slice(0, 3).map((user) => user.userID);
                 teamName = genTeamName(list.subjectName, userID[0]);
-                makeTeam(list.subject, 'progress', userID, teamName);
+                makeTeam(list.subjectName, 'progress', userID, teamName);
                 updateUser(userID, teamName);
                 updateWaitlist(list, list.user.slice(0, 3));
                 list.user.splice(0, 3);
@@ -67,7 +68,7 @@ const Matcher = async (): Promise<void> => {
             else if (list.user.length === 2 || list.user.length === 1) {
                 userID = list.user.map((user) => user.userID);
                 teamName = genTeamName(list.subjectName, userID[0]);
-                makeTeam(list.subject, 'wait_member', userID, teamName);
+                makeTeam(list.subjectName, 'wait_member', userID, teamName);
                 updateUser(userID, teamName);
                 updateWaitlist(list, list.user);
                 list.user = [];
@@ -79,7 +80,7 @@ const Matcher = async (): Promise<void> => {
                     .slice(0, 3)
                     .map((user) => user.userID);
                 teamName = genTeamName(list.subjectName, userID[0]);
-                makeTeam(list.subject, 'progress', userID, teamName);
+                makeTeam(list.subjectName, 'progress', userID, teamName);
                 updateUser(userID, teamName);
                 updateWaitlist(
                     list,
@@ -99,7 +100,7 @@ const Matcher = async (): Promise<void> => {
                     .slice(0, 3)
                     .map((user) => user.userID);
                 teamName = genTeamName(list.subjectName, userID[0]);
-                makeTeam(list.subject, 'progress', userID, teamName);
+                makeTeam(list.subjectName, 'progress', userID, teamName);
                 updateUser(userID, teamName);
                 updateWaitlist(
                     list,
