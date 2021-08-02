@@ -69,7 +69,7 @@ const Matcher = async (): Promise<void> => {
                updateUser(userID, teamName);
                 updateWaitlist(list, list.user.slice(0, 3));
                 list.user.splice(0, 3);
-            // }
+            }
             //매칭 할 인원이 1, 2명 일때
             else if (list.user.length === 2 || list.user.length === 1) {
                 userID = list.user.map((user) => user.userID);
