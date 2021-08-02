@@ -21,7 +21,7 @@ const updateUser = async (userID: string[], teamName: string): Promise<void> => 
 };
 
 const updateWaitlist = async (list, userList): Promise<void> => {
-    await Waitlist.updateMany({ subject: list.subject }, { $pop: { user: userList } });
+    await Waitlist.updateMany({ subjectName: list.subject }, { $pop: { user: userList } });
 };
 
 const Matcher = async (): Promise<void> => {
