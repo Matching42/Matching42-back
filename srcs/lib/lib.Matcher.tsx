@@ -6,7 +6,7 @@ const makeTeam = async (subject: string, state: string, user, teamID): Promise<v
     await new Team({
         ID: teamID,
         leaderID: user[0],
-        memberID: [user[0], user[1], user[2]],
+        memberID: user,
         subject: subject,
         state: state,
         startDate: Date.now(),
