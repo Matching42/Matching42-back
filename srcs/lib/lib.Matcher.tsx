@@ -1,3 +1,4 @@
+import { use } from 'passport';
 import { Team } from '../models';
 import { Waitlist } from '../models';
 import { User } from '../models';
@@ -17,8 +18,11 @@ const makeTeam = async (subject: string, state: string, user, teamID): Promise<v
     await team.save();
 };
 
-const updateUser = async (userID: string[], teamName: string): Promise<void> => {
-    await User.updateMany({ ID: userID }, { $set: { waitMatching: null, teamID: teamName } });
+const updateUser = (userID: string[], teamName: string) => {
+    console.log(userID, teamName);
+    userID.forEach(async (Id) => {
+        await User.updateOne({ ID: Id }, { $set: { waitMatching: null, teamID: teamName } });
+    });
 };
 
 const updateWaitlist = async (list, userList): Promise<void> => {
