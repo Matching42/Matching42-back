@@ -24,6 +24,10 @@ const updateWaitlist = async (list, userList): Promise<void> => {
     await Waitlist.updateMany({ subjectName: list.subject }, { $pop: { user: userList } });
 };
 
+const genTeamName = (subject:string, user:string): string => {
+    return `${subject}_${user}_${Date.now()}`;
+} 
+
 const Matcher = async (): Promise<void> => {
     let allWaitlist = await Waitlist.find({});
     if (allWaitlist === null || allWaitlist === undefined) throw new Error('Wailist not found');
@@ -32,6 +36,9 @@ const Matcher = async (): Promise<void> => {
     allWaitlist = allWaitlist.filter((list) => {
         return !(list.user === null || list === undefined);
     });
+    allWaitlist = allWaitlist.filter((list) => {
+        return list.subjectName === 'ft_printf';
+    })
     allWaitlist.forEach((list) => {
         //각 waitlist에 각 user별로 선호 클러스터 요청하기
         list.user.forEach(async (user) => {
@@ -50,16 +57,16 @@ const Matcher = async (): Promise<void> => {
                     list.user.filter((user) => user.cluster === '서초').length === 2)
             ) {
                 userID = list.user.slice(0, 3).map((user) => user.userID);
-                teamName = `${list.subject}_${userID[0]}_${Date.now()}`;
+                teamName = genTeamName(list.subjectName, userID[0]);
                 makeTeam(list.subject, 'progress', userID, teamName);
                 updateUser(userID, teamName);
                 updateWaitlist(list, list.user.slice(0, 3));
                 list.user.splice(0, 3);
             }
-            // 매칭 할 인원이 1, 2명 일때
+            //매칭 할 인원이 1, 2명 일때
             else if (list.user.length === 2 || list.user.length === 1) {
                 userID = list.user.map((user) => user.userID);
-                teamName = `${list.subject}_${userID[0]}_${Date.now()}`;
+                teamName = genTeamName(list.subjectName, userID[0]);
                 makeTeam(list.subject, 'wait_member', userID, teamName);
                 updateUser(userID, teamName);
                 updateWaitlist(list, list.user);
@@ -71,7 +78,7 @@ const Matcher = async (): Promise<void> => {
                     .filter((user) => user.cluster === '개포')
                     .slice(0, 3)
                     .map((user) => user.userID);
-                teamName = `${list.subject}_${userID[0]}_${Date.now()}`;
+                teamName = genTeamName(list.subjectName, userID[0]);
                 makeTeam(list.subject, 'progress', userID, teamName);
                 updateUser(userID, teamName);
                 updateWaitlist(
@@ -91,7 +98,7 @@ const Matcher = async (): Promise<void> => {
                     .filter((user) => user.cluster === '서초')
                     .slice(0, 3)
                     .map((user) => user.userID);
-                teamName = `${list.subject}_${userID[0]}_${Date.now()}`;
+                teamName = genTeamName(list.subjectName, userID[0]);
                 makeTeam(list.subject, 'progress', userID, teamName);
                 updateUser(userID, teamName);
                 updateWaitlist(
