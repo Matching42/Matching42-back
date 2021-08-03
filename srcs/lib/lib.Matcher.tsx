@@ -33,12 +33,70 @@ const updateWaitlist = async (list, userList): Promise<void> => {
 
 const genTeamName = (subject: string, user: string): string => {
     return `${subject}_${user}_${Date.now()}`;
-}
+};
 
 const getUserInfo = async (user): Promise<void> => {
     user.userInfo = await User.findOne({ ID: user.userID });
     user.cluster = user.userInfo.cluster;
     if (user.cluster === null) user.cluster = '개포';
+};
+
+const matching = async (list): Promise<void> => {
+    while (list.user.length > 0) {
+        let userID: string[];
+        let teamName: string;
+        // 매칭 할 인원이 총 세명일 때
+        // 매칭할 인원의 선호 클러스터가 2 : 2 일 때
+        if (
+            list.user.length === 3 ||
+            (list.user.filter((user) => user.cluster === '개포').length === 2 &&
+                list.user.filter((user) => user.cluster === '서초').length === 2)
+        ) {
+            userID = list.user.slice(0, 3).map((user) => user.userID);
+            teamName = genTeamName(list.subjectName, userID[0]);
+            makeTeam(list.subjectName, 'progress', userID, teamName);
+            updateUser(userID, teamName);
+            updateWaitlist(list, list.user.slice(0, 3));
+            list.user.splice(0, 3);
+        }
+        //매칭 할 인원이 1, 2명 일때
+        else if (list.user.length === 2 || list.user.length === 1) {
+            userID = list.user.map((user) => user.userID);
+            teamName = genTeamName(list.subjectName, userID[0]);
+            makeTeam(list.subjectName, 'wait_member', userID, teamName);
+            updateUser(userID, teamName);
+            updateWaitlist(list, list.user);
+            list.user = [];
+        }
+        // 선호 클러스터 개포인 인원 매칭
+        else if (list.user.filter((user) => user.cluster === '개포').length >= 3) {
+            userID = list.user
+                .filter((user) => user.cluster === '개포')
+                .slice(0, 3)
+                .map((user) => user.userID);
+            teamName = genTeamName(list.subjectName, userID[0]);
+            makeTeam(list.subjectName, 'progress', userID, teamName);
+            updateUser(userID, teamName);
+            updateWaitlist(list, list.user.filter((user) => user.cluster === '개포').slice(0, 3));
+            for (const id of userID) {
+                list.user = list.user.filter((user) => user.userID !== id);
+            }
+        }
+        // 서초 클러스터 매칭
+        else if (list.user.filter((user) => user.cluster === '서초').length >= 3) {
+            userID = list.user
+                .filter((user) => user.cluster === '서초')
+                .slice(0, 3)
+                .map((user) => user.userID);
+            teamName = genTeamName(list.subjectName, userID[0]);
+            makeTeam(list.subjectName, 'progress', userID, teamName);
+            updateUser(userID, teamName);
+            updateWaitlist(list, list.user.filter((user) => user.cluster === '서초').slice(0, 3));
+            for (const id of userID) {
+                list.user = list.user.filter((user) => user.userID !== id);
+            }
+        }
+    }
 };
 
 const Matcher = async (): Promise<void> => {
@@ -49,86 +107,16 @@ const Matcher = async (): Promise<void> => {
     allWaitlist = allWaitlist.filter((list) => {
         return !(list.user === null || list === undefined);
     });
-    // allWaitlist = allWaitlist.filter((list) => {
-    //     return list.subjectName === 'miniTalk';
-    // });
     //각 waitlist에 각 user별로 선호 클러스터 요청하기
     for (const list of allWaitlist) {
         for (const user of list.user) {
             await getUserInfo(user);
+            console.log(`${user.userID} ${user.cluster}`);
         }
     }
-    await allWaitlist.forEach(async (list): Promise<void> => {
-        while (list.user.length > 0) {
-            let userID: string[];
-            let teamName: string;
-            // 매칭 할 인원이 총 세명일 때
-            // 매칭할 인원의 선호 클러스터가 2 : 2 일 때
-            if (
-                list.user.length === 3 ||
-                (list.user.filter((user) => user.cluster === '개포').length === 2 &&
-                    list.user.filter((user) => user.cluster === '서초').length === 2)
-            ) {
-                userID = list.user.slice(0, 3).map((user) => user.userID);
-                teamName = genTeamName(list.subjectName, userID[0]);
-                makeTeam(list.subjectName, 'progress', userID, teamName);
-                updateUser(userID, teamName);
-                updateWaitlist(list, list.user.slice(0, 3));
-                list.user.splice(0, 3);
-
-            }
-            //매칭 할 인원이 1, 2명 일때
-            else if (list.user.length === 2 || list.user.length === 1) {
-                userID = list.user.map((user) => user.userID);
-                teamName = genTeamName(list.subjectName, userID[0]);
-                makeTeam(list.subjectName, 'wait_member', userID, teamName);
-                updateUser(userID, teamName);
-                updateWaitlist(list, list.user);
-                list.user = [];
-                console.log('target');
-            }
-            // 선호 클러스터 개포인 인원 매칭
-            else if (list.user.filter((user) => user.cluster === '개포').length >= 3) {
-                userID = list.user
-                    .filter((user) => user.cluster === '개포')
-                    .slice(0, 3)
-                    .map((user) => user.userID);
-                teamName = genTeamName(list.subjectName, userID[0]);
-                makeTeam(list.subjectName, 'progress', userID, teamName);
-                updateUser(userID, teamName);
-                updateWaitlist(
-                    list,
-                    list.user.filter((user) => user.cluster === '개포').slice(0, 3)
-                );
-                userID.forEach((ID) =>
-                    list.splice(
-                        list.user.findIndex((user) => user.userID === ID),
-                        1
-                    )
-                );
-            }
-            // 서초 클러스터 매칭
-            else if (list.user.filter((user) => user.cluster === '서초').length >= 3) {
-                userID = list.user
-                    .filter((user) => user.cluster === '서초')
-                    .slice(0, 3)
-                    .map((user) => user.userID);
-                teamName = genTeamName(list.subjectName, userID[0]);
-                makeTeam(list.subjectName, 'progress', userID, teamName);
-                updateUser(userID, teamName);
-                updateWaitlist(
-                    list,
-                    list.user.filter((user) => user.cluster === '서초').slice(0, 3)
-                );
-                userID.forEach((ID) =>
-                    list.splice(
-                        list.user.findIndex((user) => user.userID === ID),
-                        1
-                    )
-                );
-            }
-        }
-    });
+    for (const list of allWaitlist) {
+        await matching(list);
+    }
 };
 
 export default Matcher;
