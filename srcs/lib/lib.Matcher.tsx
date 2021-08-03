@@ -33,6 +33,12 @@ const updateWaitlist = async (list, userList): Promise<void> => {
 
 const genTeamName = (subject: string, user: string): string => {
     return `${subject}_${user}_${Date.now()}`;
+}
+
+const getUserInfo = async (user): Promise<void> => {
+    user.userInfo = await User.findOne({ ID: user.userID });
+    user.cluster = user.userInfo.cluster;
+    if (user.cluster === null) user.cluster = '개포';
 };
 
 const Matcher = async (): Promise<void> => {
@@ -43,16 +49,16 @@ const Matcher = async (): Promise<void> => {
     allWaitlist = allWaitlist.filter((list) => {
         return !(list.user === null || list === undefined);
     });
-    allWaitlist = allWaitlist.filter((list) => {
-        return list.subjectName === 'ft_printf';
-    })
-    allWaitlist.forEach((list) => {
-        //각 waitlist에 각 user별로 선호 클러스터 요청하기
-        list.user.forEach(async (user) => {
-            user.userInfo = await User.findOne({ ID: user.userID });
-            user.cluster = user.userInfo.cluster;
-            if (user.cluster === null) user.cluster = '개포';
-        });
+    // allWaitlist = allWaitlist.filter((list) => {
+    //     return list.subjectName === 'miniTalk';
+    // });
+    //각 waitlist에 각 user별로 선호 클러스터 요청하기
+    for (const list of allWaitlist) {
+        for (const user of list.user) {
+            await getUserInfo(user);
+        }
+    }
+    await allWaitlist.forEach(async (list): Promise<void> => {
         while (list.user.length > 0) {
             let userID: string[];
             let teamName: string;
@@ -65,10 +71,11 @@ const Matcher = async (): Promise<void> => {
             ) {
                 userID = list.user.slice(0, 3).map((user) => user.userID);
                 teamName = genTeamName(list.subjectName, userID[0]);
-               makeTeam(list.subjectName, 'progress', userID, teamName);
-               updateUser(userID, teamName);
+                makeTeam(list.subjectName, 'progress', userID, teamName);
+                updateUser(userID, teamName);
                 updateWaitlist(list, list.user.slice(0, 3));
                 list.user.splice(0, 3);
+
             }
             //매칭 할 인원이 1, 2명 일때
             else if (list.user.length === 2 || list.user.length === 1) {
@@ -78,6 +85,7 @@ const Matcher = async (): Promise<void> => {
                 updateUser(userID, teamName);
                 updateWaitlist(list, list.user);
                 list.user = [];
+                console.log('target');
             }
             // 선호 클러스터 개포인 인원 매칭
             else if (list.user.filter((user) => user.cluster === '개포').length >= 3) {
