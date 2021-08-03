@@ -6,3 +6,4 @@ export { default as findOneWaitlist } from './lib.findOneWaitlist';
 export { default as findOneTeam } from './lib.findOneTeam';
 export { default as findAllTeam } from './lib.findAllTeam';
 export { default as sendSlackMessage } from './lib.sendSlackMessage';
+export { default as createGitRepoLib } from './lib.createGitRepo';
