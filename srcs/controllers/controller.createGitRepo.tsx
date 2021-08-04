@@ -2,6 +2,7 @@ import { RequestHandler } from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
 import { Team } from '../models';
+import { findOneTeam } from '../lib';
 
 dotenv.config();
 
@@ -10,11 +11,12 @@ const checkError = (team) => {
     if (team.subject === undefined) throw new Error('Team has no subject');
     if (team.ID === undefined) throw new Error('Team has no ID');
     if (team.gitLink) throw new Error('Team already has a gitLink');
+    if (team.state === 'end') throw new Error('Team already finished this subject');
 };
 
 const createGitRepo: RequestHandler = async (req, res) => {
     try {
-        let team = await Team.findOne({ ID: req.params.teamID });
+        let team = await findOneTeam(req.params.teamID);
         checkError(team);
         const createResult = await axios({
             method: 'post',
@@ -31,13 +33,12 @@ const createGitRepo: RequestHandler = async (req, res) => {
         });
         const gitUrl = createResult.data.html_url;
         if (gitUrl === undefined) throw new Error('git Repository creation failed');
-        await Team.updateOne(
+        team = await Team.findOneAndUpdate(
             { ID: req.params.teamID },
             { gitLink: gitUrl },
-            { runValidators: true }
+            { runValidators: true, new: true }
         );
-        team = await Team.findOne({ ID: req.params.teamID });
-        res.json({
+        res.status(200).json({
             success: true,
             team,
         });
