@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 mongoose.set('useCreateIndex', true);
+mongoose.set('useFindAndModify', false);
 
 enum TeamState {
     'progress',
@@ -24,6 +25,8 @@ const teamSchema = new Schema({
     notionLink: { type: String, unique: true },
     gitLink: { type: String, unique: true },
     teamName: { type: String, unique: true },
+    description: {type: String},
+    tag: [{type: String}],
 });
 
 export default mongoose.model('team', teamSchema, 'Team');

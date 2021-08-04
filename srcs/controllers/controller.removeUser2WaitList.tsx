@@ -1,45 +1,37 @@
 import { RequestHandler } from 'express';
 import { User, Waitlist } from '../models';
+import { findOneWaitlist, findOneUser } from '../lib';
+
+const errorWaitlistCheck = (WaitlistDocument, userId) => {
+    const userIndex = WaitlistDocument.user.map((userInfo) => userInfo.userID).indexOf(userId);
+    if (userIndex !== -1) return userIndex;
+    else throw new Error(`This userID not registered in ${WaitlistDocument.subjectName} subject`);
+};
 
 const removeUser2Waitlist: RequestHandler = async (req, res) => {
     try {
-        const UserDocument = await User.findOne({ ID: req.params.userID }).exec();
-        if (UserDocument === null || UserDocument === undefined)
-            throw new Error('This userID does not exist.');
+        const UserDocument = await findOneUser(req.params.userID);
         if (UserDocument.waitMatching === null)
             throw new Error('This userID not registered in any subject');
 
-        const WaitlistDocument = await Waitlist.findOne({
-            subjectName: UserDocument.waitMatching,
-        }).exec();
-        if (WaitlistDocument === null || WaitlistDocument === undefined)
-            throw new Error('This subjectName does not exist.');
-        let WaitlistUserInfo = null;
-        for (let i = 0; i < WaitlistDocument.user.length; i++) {
-            if (WaitlistDocument.user[i].userID === req.params.userID) {
-                WaitlistUserInfo = WaitlistDocument.user[i];
-                break;
-            }
-        }
-        if (WaitlistUserInfo === null) {
-            throw new Error(
-                'This userID not registered in ' + WaitlistDocument.subjectName + 'subject'
-            );
-        }
+        const WaitlistDocument = await findOneWaitlist(UserDocument.waitMatching);
+        const userIndex = await errorWaitlistCheck(WaitlistDocument, req.params.userID);
+        const WaitlistUserInfo = WaitlistDocument.user[userIndex];
 
         const ChangedUser = await User.findOneAndUpdate(
             { ID: req.params.userID },
             {
                 waitMatching: null,
+                deadline: null,
             },
             { new: true, runValidators: true }
-        ).exec();
+        );
 
         const ChangedWaitlist = await Waitlist.findOneAndUpdate(
             { subjectName: WaitlistDocument.subjectName },
             { $pull: { user: WaitlistUserInfo } },
             { new: true, runValidators: true }
-        ).exec();
+        );
 
         res.status(200).json({
             success: true,
