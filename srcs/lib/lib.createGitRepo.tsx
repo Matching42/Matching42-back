@@ -7,11 +7,12 @@ import { findOneTeam } from '../lib';
 dotenv.config();
 
 const checkError = (team) => {
-    if (team === null) throw new Error('There is no such Team');
-    if (team.subject === undefined) throw new Error('Team has no subject');
-    if (team.ID === undefined) throw new Error('Team has no ID');
-    if (team.gitLink) throw new Error('Team already has a gitLink');
-    if (team.state === 'end') throw new Error('Team already finished this subject');
+    if (team.subject === undefined)
+        throw new Error('\x1b[31mError: lib.createGitRepo: Team has NO subject\x1b[0m\n');
+    if (team.gitLink)
+        throw new Error('\x1b[31mError: lib.createGitRepo: Team already has gitLink\x1b[0m\n');
+    if (team.state === 'end')
+        throw new Error('\x1b[31mError: lib.createGitRepo: Team state is "end"\x1b[0m\n');
 };
 
 const createGitRepoLib: (teamID: string) => Promise<tTeam> = async (teamID) => {
