@@ -111,7 +111,6 @@ const Matcher = async (): Promise<void> => {
     for (const list of allWaitlist) {
         for (const user of list.user) {
             await getUserInfo(user);
-            console.log(`${user.userID} ${user.cluster}`);
         }
     }
     for (const list of allWaitlist) {
