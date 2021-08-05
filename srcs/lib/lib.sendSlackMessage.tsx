@@ -13,7 +13,7 @@ const sendMsgPromise: (msg: string) => Promise<tSlackdata> = async (msg) => {
         url: 'https://slack.com/api/chat.postMessage',
         headers: {
             'Content-type': 'application/json',
-            Authorization: `Bearer ${BOT_TOKENS}`,
+            Authorization: `Bearer ${channelID}`,
         },
         data: {
             text: msg,
@@ -24,17 +24,21 @@ const sendMsgPromise: (msg: string) => Promise<tSlackdata> = async (msg) => {
 };
 
 const sendSlackMessage: (teamID: string) => Promise<void> = async (teamID) => {
-    const team = await findOneTeam(teamID);
+    try {
+        const team = await findOneTeam(teamID);
 
-    const msg = `${team.subject} subject에 대한 팀매칭이 완료 되었습니다.
-    팀장 : @${team.leaderID}
-    팀원 : @${team.memberID.join(' @')}
-    notion link : ${team.notionLink}
-    github link : ${team.gitLink}`;
+        const msg = `${team.subject} subject에 대한 팀매칭이 완료 되었습니다.
+        팀장 : @${team.leaderID}
+        팀원 : @${team.memberID.join(' @')}
+        notion link : ${team.notionLink}
+        github link : ${team.gitLink}`;
 
-    await sendMsgPromise(msg).then((slackResponse) => {
-        if (slackResponse.ok === false) throw new Error(`slack API ${slackResponse.error}`);
-    });
+        await sendMsgPromise(msg).then((slackResponse) => {
+            if (slackResponse.ok === false) throw new Error(`slack API ${slackResponse.error}`);
+        });
+    } catch (e) {
+        console.error(e);
+    }
 };
 
 export default sendSlackMessage;
