@@ -136,11 +136,11 @@ const Matcher = async (): Promise<void> => {
     //각 waitlist에 각 user별로 선호 클러스터 요청하기
     for (const list of allWaitlist) {
         for (const user of list.user) {
-            await getUserInfo(user).catch((error) => console.error(error));
+            await getUserInfo(user);
         }
     }
     for (const list of allWaitlist) {
-        await matching(list).catch((error) => console.error(error));
+        await matching(list);
     }
 };
 
