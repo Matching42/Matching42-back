@@ -13,7 +13,7 @@ const sendMsgPromise: (msg: string) => Promise<tSlackdata> = async (msg) => {
         url: 'https://slack.com/api/chat.postMessage',
         headers: {
             'Content-type': 'application/json',
-            Authorization: `Bearer ${channelID}`,
+            Authorization: `Bearer ${BOT_TOKENS}`,
         },
         data: {
             text: msg,
