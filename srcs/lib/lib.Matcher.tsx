@@ -48,14 +48,20 @@ function getRandomIntInclusive(min, max) {
 const matching = async (subject, user, min: number, max: number): Promise<void> => {
     try {
         while (user.length > 0) {
+            console.log(user);
             const matchingNumber: number = getRandomIntInclusive(min, max);
-            const userID: string[] = user.slice(0, matchingNumber).map(user.ID);
+            console.log(matchingNumber);
+            const userID: string[] = user.slice(0, matchingNumber).map((user) => user.ID);
+            console.log(userID);
             const teamName: string = genTeamName(subject, userID[0]);
+            console.log(teamName);
             const state: string = userID.length >= min ? 'progress' : 'wait_member';
-            await makeTeam(subject, state, userID, teamName);
-            await updateUser(userID, teamName);
-            await updateWaitlist(subject, userID);
+            console.log(state);
+            // await makeTeam(subject, state, userID, teamName);
+            // await updateUser(userID, teamName);
+            // await updateWaitlist(subject, userID);
             user.splice(0, matchingNumber);
+            console.log(user);
         }
     } catch (error) {
         console.error(error);
@@ -65,7 +71,7 @@ const matching = async (subject, user, min: number, max: number): Promise<void> 
 const Matcher = async (): Promise<void> => {
     const matchingSubject = await User.find()
         .distinct('waitMatching')
-        .reject(new Error(`Error: find User.waitMatcing ond DB fail`));
+        .catch((err) => console.error(err));
     for (const subject of matchingSubject) {
         if (subject === null || subject === undefined) continue;
         const matchingUser = await User.find().where('waitMatching', subject).sort('cluster');
@@ -75,6 +81,7 @@ const Matcher = async (): Promise<void> => {
             matching(subject, matchingUser, 4, 5);
         else if (subject === 'ft_transcendence') matching(subject, matchingUser, 3, 5);
         else matching(subject, matchingUser, 3, 3);
-    }};
+    }
+};
 
 export default Matcher;
