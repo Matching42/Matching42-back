@@ -14,7 +14,7 @@ const makeTeam = async (subject: string, state: string, user, teamID): Promise<v
         gitLink: null,
         teamName: teamID,
     });
-    await team.save().reject(new Error(`Error: save new team on DB fail`));
+    await team.save();
 };
 
 const updateUser = (userID: string[], teamName: string) => {
@@ -22,16 +22,13 @@ const updateUser = (userID: string[], teamName: string) => {
         await User.updateOne(
             { ID: Id },
             { $set: { waitMatching: null, teamID: teamName, deadline: null } }
-        ).reject(new Error(`Error: update user information on DB fail`));
+        );
     });
 };
 
 const updateWaitlist = async (subject, userList): Promise<void> => {
     userList.forEach(async (ID) => {
-        await Waitlist.updateOne(
-            { subjectName: subject },
-            { $pull: { user: { userID: ID } } }
-        ).reject(new Error(`Error: update waitlist on DB fail`));
+        await Waitlist.updateOne({ subjectName: subject }, { $pull: { user: { userID: ID } } });
     });
 };
 
@@ -48,20 +45,14 @@ function getRandomIntInclusive(min, max) {
 const matching = async (subject, user, min: number, max: number): Promise<void> => {
     try {
         while (user.length > 0) {
-            console.log(user);
             const matchingNumber: number = getRandomIntInclusive(min, max);
-            console.log(matchingNumber);
             const userID: string[] = user.slice(0, matchingNumber).map((user) => user.ID);
-            console.log(userID);
             const teamName: string = genTeamName(subject, userID[0]);
-            console.log(teamName);
             const state: string = userID.length >= min ? 'progress' : 'wait_member';
-            console.log(state);
-            // await makeTeam(subject, state, userID, teamName);
-            // await updateUser(userID, teamName);
-            // await updateWaitlist(subject, userID);
+            await makeTeam(subject, state, userID, teamName);
+            await updateUser(userID, teamName);
+            await updateWaitlist(subject, userID);
             user.splice(0, matchingNumber);
-            console.log(user);
         }
     } catch (error) {
         console.error(error);
