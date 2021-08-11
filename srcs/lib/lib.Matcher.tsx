@@ -2,6 +2,7 @@ import { Team } from '../models';
 import { Waitlist } from '../models';
 import { User } from '../models';
 import { findOneUser, findOneTeam } from '../lib';
+import { match } from 'assert/strict';
 
 const makeTeam = async (subject: string, state: string, user, teamID): Promise<void> => {
     const team = new Team({
@@ -126,22 +127,30 @@ const matching = async (list): Promise<void> => {
 };
 
 const Matcher = async (): Promise<void> => {
-    let allWaitlist = await Waitlist.find({}).reject(new Error(`Error: find Waitlist on DB fail`));
-    if (allWaitlist === null || allWaitlist === undefined) throw new Error('Wailist not found');
+    const matchingSubject = await User.find().distinct('waitMatching');
+    console.log(matchingSubject);
+    for (const subject of matchingSubject) {
+        if (subject === null)
+            continue;
+        let matchingUser = await User.find().where('waitMatching', subject).sort('cluster');
+        console.log(matchingUser);
+    }
+    //let allWaitlist = await Waitlist.find({}).reject(new Error(`Error: find Waitlist on DB fail`));
+    //if (allWaitlist === null || allWaitlist === undefined) throw new Error('Wailist not found');
     //user 배열에 원소가 있는지로 필터링
     //매칭해야할 인원이 있는 서브젝트만 남음
-    allWaitlist = allWaitlist.filter((list) => {
-        return !(list.user === null || list === undefined);
-    });
-    //각 waitlist에 각 user별로 선호 클러스터 요청하기
-    for (const list of allWaitlist) {
-        for (const user of list.user) {
-            await getUserInfo(user);
-        }
-    }
-    for (const list of allWaitlist) {
-        await matching(list);
-    }
+    // allWaitlist = allWaitlist.filter((list) => {
+    //     return !(list.user === null || list === undefined);
+    // });
+    // //각 waitlist에 각 user별로 선호 클러스터 요청하기
+    // for (const list of allWaitlist) {
+    //     for (const user of list.user) {
+    //         await getUserInfo(user);
+    //     }
+    // }
+    // for (const list of allWaitlist) {
+    //     await matching(list);
+    // }
 };
 
 export default Matcher;
