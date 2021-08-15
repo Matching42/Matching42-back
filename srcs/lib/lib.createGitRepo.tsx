@@ -1,7 +1,5 @@
-import { tTeam } from '../../@types/types.d';
 import axios from 'axios';
 import dotenv from 'dotenv';
-import { Team } from '../models';
 import { findOneTeam } from '../lib';
 
 dotenv.config();
@@ -15,30 +13,28 @@ const checkError = (team) => {
         throw new Error('\x1b[31mError: lib.createGitRepo: Team state is "end"\x1b[0m\n');
 };
 
-const createGitRepoLib: (teamID: string) => Promise<tTeam> = async (teamID) => {
-    let team = await findOneTeam(teamID);
-    checkError(team);
-    const createResult = await axios({
-        method: 'post',
-        url: `https://api.github.com/orgs/${process.env.ORG_NAME}/repos`,
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `token ${process.env.GIT_TOKEN}`,
-        },
-        data: {
-            name: `Matching42_${team.subject}_${team.ID}`,
-            auto_init: true,
-            private: true,
-        },
-    });
-    const gitUrl = createResult.data.html_url;
-    if (gitUrl === undefined) throw new Error('git Repository creation failed');
-    team = await Team.findOneAndUpdate(
-        { ID: teamID },
-        { gitLink: gitUrl },
-        { runValidators: true, new: true }
-    );
-    return team;
+const createGitRepo: (teamID: string) => Promise<string | null> = async (teamID) => {
+    try {
+        const team = await findOneTeam(teamID);
+        checkError(team);
+        const createResult = await axios({
+            method: 'post',
+            url: `https://api.github.com/orgs/${process.env.ORG_NAME}/repos`,
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `token ${process.env.GIT_TOKEN}`,
+            },
+            data: {
+                name: `Matching42_${team.subject}_${team.ID}`,
+                auto_init: true,
+                private: true,
+            },
+        });
+        return createResult.data.html_url;
+    } catch (e) {
+        console.error(e.message);
+        return null;
+    }
 };
 
-export default createGitRepoLib;
+export default createGitRepo;
