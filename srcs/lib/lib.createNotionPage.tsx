@@ -90,7 +90,7 @@ const createNotionPage = async (
         const notionPageUrl = `https://www.notion.so/${createPageRes.data.id.replace(/-/g, '')}`;
         return notionPageUrl;
     } catch (error) {
-        logger.error(error);
+        logger.error(error.message);
         return null;
     }
 };
