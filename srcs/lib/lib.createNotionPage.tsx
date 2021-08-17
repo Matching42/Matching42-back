@@ -69,7 +69,7 @@ const createNotionPage = async (
                             {
                                 type: 'text',
                                 text: {
-                                    content: `팀원: ${team.memberID.join(', ')}`,
+                                    content: `팀원: ${teamMember.join(', ')}`,
                                 },
                             },
                         ],
