@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: null,
     },
+    endTeamList: [{ type: String }],
     gitName: {
         type: String,
         default: null,

@@ -7,6 +7,7 @@ export declare type tUser = {
     }
     waitMatching: string /* 과제 */
     teamID: string
+    endTeamList: string[]
     gitName: string
     cluster: string
     deadline: string
@@ -25,7 +26,7 @@ export declare type tTeam = {
     teamName: string
     description: string
     tag: string[]
-} 
+}
 
 export declare type tWaitlist = {
     _id: string
@@ -70,7 +71,7 @@ export declare type tIntra = {
     campus: Campu[]
     campus_users: CampusUser[]
   }
-  
+
   export interface CursusUser {
     grade?: string
     level: number
@@ -90,20 +91,20 @@ export declare type tIntra = {
     name: string
     level: number
   }
-  
+
   export interface User {
     id: number
     login: string
     url: string
   }
-  
+
   export interface Cursus {
     id: number
     created_at: string
     name: string
     slug: string
   }
-  
+
   export interface ProjectsUser {
     id: number
     occurrence: number
@@ -117,14 +118,14 @@ export declare type tIntra = {
     marked: boolean
     retriable_at?: string
   }
-  
+
   export interface Project {
     id: number
     name: string
     slug: string
     parent_id: any
   }
-  
+
   export interface LanguagesUser {
     id: number
     language_id: number
@@ -132,7 +133,7 @@ export declare type tIntra = {
     position: number
     created_at: string
   }
-  
+
   export interface Achievement {
     id: number
     name: string
@@ -144,7 +145,7 @@ export declare type tIntra = {
     nbr_of_success?: number
     users_url: string
   }
-  
+
   export interface Campu {
     id: number
     name: string
@@ -163,7 +164,7 @@ export declare type tIntra = {
     email_extension: string
     default_hidden_phone: boolean
   }
-  
+
   export interface Language {
     id: number
     name: string
@@ -171,7 +172,7 @@ export declare type tIntra = {
     created_at: string
     updated_at: string
   }
-  
+
   export interface CampusUser {
     id: number
     user_id: number
