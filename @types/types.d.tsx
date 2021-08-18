@@ -9,6 +9,7 @@ export declare type tUser = {
     teamID: string
     gitName: string
     cluster: string
+    deadline: string
 }
 
 export declare type tTeam = {
@@ -22,7 +23,9 @@ export declare type tTeam = {
     notionLink: string
     gitLink: string
     teamName: string
-}
+    description: string
+    tag: string[]
+} 
 
 export declare type tWaitlist = {
     _id: string
@@ -81,7 +84,7 @@ export declare type tIntra = {
     user: User
     cursus: Cursus
   }
-  
+
   export interface Skill {
     id: number
     name: string
@@ -175,4 +178,37 @@ export declare type tIntra = {
     campus_id: number
     is_primary: boolean
   }
-  
+
+  export declare type tSlackdata = {
+    ok: boolean
+    channel?: string
+    ts?: string
+    message?: message
+    error?: string
+    warning: string
+    response_metadata: response_metadata
+  }
+
+  export interface message {
+    bot_id: string
+    type: string
+    text: string
+    user: string
+    ts: string
+    team: string
+    bot_profile: bot_profile
+  }
+
+  export interface bot_profile {
+    id: string
+    deleted: boolean
+    name: string
+    updated: number
+    app_id: string
+    icons: Object
+    team_id: string
+  }
+
+  export interface response_metadata {
+    warnings: string[]
+  }

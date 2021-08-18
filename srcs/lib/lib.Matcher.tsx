@@ -1,6 +1,7 @@
 import { Team } from '../models';
 import { Waitlist } from '../models';
 import { User } from '../models';
+import { createGitRepo, createNotionPage, sendSlackMessage } from '../lib';
 
 const makeTeam = async (subject: string, state: string, user, teamID): Promise<void> => {
     const team = new Team({
@@ -10,10 +11,11 @@ const makeTeam = async (subject: string, state: string, user, teamID): Promise<v
         subject: subject,
         state: state,
         startDate: Date.now(),
-        notionLink: null,
-        gitLink: null,
+        notionLink: await createNotionPage(teamID, subject, user),
+        gitLink: await createGitRepo(subject, teamID),
         teamName: teamID,
     });
+    for (let i = 0; i < 3 && sendSlackMessage(team) === false; i++);
     await team.save();
 };
 

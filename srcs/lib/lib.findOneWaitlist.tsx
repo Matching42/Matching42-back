@@ -1,7 +1,7 @@
 import { Waitlist } from '../models';
 import { tWaitlist } from '../../@types/types.d';
 
-const findAllWaitlist: (subjectName: string) => Promise<tWaitlist> = async (subjectName) => {
+const findOneWaitlist: (subjectName: string) => Promise<tWaitlist> = async (subjectName) => {
     const WaitlistDocument = await Waitlist.findOne({
         subjectName: subjectName,
     });
@@ -10,4 +10,4 @@ const findAllWaitlist: (subjectName: string) => Promise<tWaitlist> = async (subj
     return WaitlistDocument;
 };
 
-export default findAllWaitlist;
+export default findOneWaitlist;

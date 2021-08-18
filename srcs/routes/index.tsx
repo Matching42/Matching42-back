@@ -17,17 +17,17 @@ router.get('/login/redirect', granted);
 router.get('/login/fail', fail);
 
 //router.use(isAuth);
-router.get('/user', controller.getUser);
-router.get('/user/:userID', controller.getUser);
+router.get('/user', controller.getAllUser);
+router.get('/user/:userID', controller.getOneUser);
 router.get('/waitlist', controller.getWaitlist);
 router.post('/waitlist', controller.addUser2WaitList);
-router.post('/sendSlackMessage', controller.sendSlackMessage);
 router.delete('/waitlist/:userID', controller.removeUser2WaitList);
 router.post('/addmember', controller.addUser2Team);
 router.get('/team', controller.getTeam);
 router.get('/team/:teamID', controller.getTeam);
-router.patch('/team/:teamID', controller.updateTeamState);
-router.post('/team/creategitrepo/:teamID', controller.createGitRepo);
+router.patch('/team/:teamID', controller.updateTeam);
+router.patch('/team/tag/:teamID', controller.updateTeamTag);
 router.post('/team/invitetorepo/:teamID/:userID?', controller.inviteToRepo);
+router.get('/subjectPDF/:subject', controller.getSubjectPDF);
 
 export default router;
