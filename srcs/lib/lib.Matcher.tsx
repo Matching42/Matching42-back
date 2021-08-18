@@ -15,7 +15,7 @@ const makeTeam = async (subject: string, state: string, user, teamID): Promise<v
         gitLink: await createGitRepo(subject, teamID),
         teamName: teamID,
     });
-    for (let i = 0; i < 3 && sendSlackMessage(team) === false; i++);
+    for (let i = 0; i < 3 && (await sendSlackMessage(team)) === false; i++);
     await team.save();
 };
 
