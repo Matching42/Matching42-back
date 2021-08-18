@@ -9,6 +9,7 @@ export declare type tUser = {
     teamID: string
     gitName: string
     cluster: string
+    deadline: string
 }
 
 export declare type tTeam = {
@@ -22,7 +23,9 @@ export declare type tTeam = {
     notionLink: string
     gitLink: string
     teamName: string
-}
+    description: string
+    tag: string[]
+} 
 
 export declare type tWaitlist = {
     _id: string
