@@ -20,6 +20,7 @@
  *                          - level : 유저의 42SEOUL 레벨 정보 </br>
  *                      - waitMatching : 유저의 매칭 대기 상태 정보 </br>
  *                      - teamID : 유저가 속해 있는 팀의 ID </br>
+ *                      - endTeamList : 유저가 과거 속해 있던 팀의 리스트 </br>
  *                      - gitID : 유저의 Github ID </br>
  *                      - cluster : 유저가 선호하는 클러스터
  *              content:

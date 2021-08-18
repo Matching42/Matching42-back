@@ -1,21 +1,16 @@
 import dotenv from 'dotenv';
 import axios from 'axios';
-import { Team } from '../models';
-import { findOneTeam } from '../lib';
+import { logger } from '../config/winston';
 
 dotenv.config();
 
-const checkError = (team) => {
-    if (team.subject === undefined) throw new Error(`The team(${team.ID}) has no subject`);
-    if (team.notionLink) throw new Error(`The team(${team.ID}) already has a notionLink`);
-    if (team.state === 'end') throw new Error(`The team(${team.ID}) already finished this subject`);
-};
-
-const createNotionPage = async (teamID: string): Promise<void> => {
+const createNotionPage = async (
+    teamName: string,
+    teamSubject: string,
+    teamMember: string[]
+): Promise<string | null> => {
     try {
         const database_id: string = process.env.NOTION_DATABASE_ID || '';
-        const team = await findOneTeam(teamID);
-        checkError(team);
         const pageObject = {
             parent: {
                 database_id,
@@ -26,7 +21,7 @@ const createNotionPage = async (teamID: string): Promise<void> => {
                     title: [
                         {
                             text: {
-                                content: team.teamName,
+                                content: teamName,
                             },
                         },
                     ],
@@ -34,7 +29,7 @@ const createNotionPage = async (teamID: string): Promise<void> => {
                 Subject: {
                     type: 'select',
                     select: {
-                        name: team.subject,
+                        name: teamSubject,
                     },
                 },
                 Member: {
@@ -42,7 +37,7 @@ const createNotionPage = async (teamID: string): Promise<void> => {
                     rich_text: [
                         {
                             text: {
-                                content: team.memberID.join(', '),
+                                content: teamMember.join(', '),
                             },
                         },
                     ],
@@ -74,7 +69,7 @@ const createNotionPage = async (teamID: string): Promise<void> => {
                             {
                                 type: 'text',
                                 text: {
-                                    content: `팀원: ${team.memberID.join(', ')}`,
+                                    content: `팀원: ${teamMember.join(', ')}`,
                                 },
                             },
                         ],
@@ -93,13 +88,10 @@ const createNotionPage = async (teamID: string): Promise<void> => {
             data: pageObject,
         });
         const notionPageUrl = `https://www.notion.so/${createPageRes.data.id.replace(/-/g, '')}`;
-        await Team.updateOne(
-            { ID: team.ID },
-            { notionLink: notionPageUrl },
-            { runValidators: true }
-        );
+        return notionPageUrl;
     } catch (error) {
-        console.error(error);
+        logger.error(error.message);
+        return null;
     }
 };
 

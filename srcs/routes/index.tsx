@@ -27,7 +27,6 @@ router.get('/team', controller.getTeam);
 router.get('/team/:teamID', controller.getTeam);
 router.patch('/team/:teamID', controller.updateTeam);
 router.patch('/team/tag/:teamID', controller.updateTeamTag);
-router.post('/team/creategitrepo/:teamID', controller.createGitRepo);
 router.post('/team/invitetorepo/:teamID/:userID?', controller.inviteToRepo);
 router.get('/subjectPDF/:subject', controller.getSubjectPDF);
 
