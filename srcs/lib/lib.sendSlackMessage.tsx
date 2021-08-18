@@ -31,10 +31,7 @@ const sendSlackMessage: (team: tTeam) => Promise<boolean> = async (team) => {
         github link : ${team.gitLink}`;
 
         await sendMsgPromise(msg).then((slackResponse) => {
-            if (slackResponse.ok === false) {
-                console.error(`slack API ${slackResponse.error}`);
-                return false;
-            }
+            if (slackResponse.ok === false) throw new Error(`slack API ${slackResponse.error}`);
         });
 
         return true;
