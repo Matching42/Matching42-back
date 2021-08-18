@@ -23,7 +23,7 @@ const sendMsgPromise: (msg: string) => Promise<tSlackdata> = async (msg) => {
     }).then((response) => response.data);
 };
 
-const sendSlackMessage: (team: tTeam) => Promise<void> = async (team) => {
+const sendSlackMessage: (team: tTeam) => Promise<boolean> = async (team) => {
     try {
         const msg = `${team.subject} subject에 대한 팀매칭이 완료 되었습니다.
         팀장 : @${team.leaderID}
@@ -32,10 +32,16 @@ const sendSlackMessage: (team: tTeam) => Promise<void> = async (team) => {
         github link : ${team.gitLink}`;
 
         await sendMsgPromise(msg).then((slackResponse) => {
-            if (slackResponse.ok === false) throw new Error(`slack API ${slackResponse.error}`);
+            if (slackResponse.ok === false) {
+                console.error(`slack API ${slackResponse.error}`);
+                return false;
+            }
         });
+
+        return true;
     } catch (e) {
         console.error(e);
+        return false;
     }
 };
 
