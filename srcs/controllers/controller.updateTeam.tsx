@@ -1,10 +1,14 @@
 import { RequestHandler } from 'express';
 import { Team, User } from '../models';
 
-const endTeam: (memberID: Array<string>) => boolean = (memberID) => {
+const endTeam: (memberID: Array<string>, teamID: string) => boolean = (memberID, teamID) => {
     try {
         memberID.forEach(async (id) => {
-            await User.findOneAndUpdate({ ID: id }, { teamID: null }, { new: true });
+            await User.updateOne(
+                { ID: id },
+                { teamID: null, $push: { endTeamList: teamID } },
+                { new: true }
+            );
         });
         return true;
     } catch (e) {
@@ -24,7 +28,7 @@ const updateTeam: RequestHandler = async (req, res) => {
             new: true,
         });
 
-        if (req.body.state === 'end' && !endTeam(team.memberID))
+        if (req.body.state === 'end' && !endTeam(team.memberID, req.params.teamID))
             throw new Error('Member State Change Failed');
 
         if (team === null || team === undefined) throw new Error('Invalid Team ID');
