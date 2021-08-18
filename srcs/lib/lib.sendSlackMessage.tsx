@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import axios from 'axios';
 import { findOneTeam } from './';
-import { tSlackdata } from '../../@types/types.d';
+import { tSlackdata, tTeam } from '../../@types/types.d';
 
 dotenv.config();
 const BOT_TOKENS = process.env.SLACK_BOT_TOKENS;
@@ -23,10 +23,8 @@ const sendMsgPromise: (msg: string) => Promise<tSlackdata> = async (msg) => {
     }).then((response) => response.data);
 };
 
-const sendSlackMessage: (teamID: string) => Promise<void> = async (teamID) => {
+const sendSlackMessage: (team: tTeam) => Promise<void> = async (team) => {
     try {
-        const team = await findOneTeam(teamID);
-
         const msg = `${team.subject} subject에 대한 팀매칭이 완료 되었습니다.
         팀장 : @${team.leaderID}
         팀원 : @${team.memberID.join(' @')}
