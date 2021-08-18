@@ -1,6 +1,5 @@
 import dotenv from 'dotenv';
 import axios from 'axios';
-import { findOneTeam } from './';
 import { tSlackdata, tTeam } from '../../@types/types.d';
 
 dotenv.config();
