@@ -1,5 +1,20 @@
 import { RequestHandler } from 'express';
-import { Team } from '../models';
+import { Team, User } from '../models';
+
+const endTeam: (memberID: Array<string>, teamID: string) => boolean = (memberID, teamID) => {
+    try {
+        memberID.forEach(async (id) => {
+            await User.updateOne(
+                { ID: id },
+                { teamID: null, $push: { endTeamList: teamID } },
+                { new: true }
+            );
+        });
+        return true;
+    } catch (e) {
+        return false;
+    }
+};
 
 const updateTeam: RequestHandler = async (req, res) => {
     try {
@@ -12,6 +27,10 @@ const updateTeam: RequestHandler = async (req, res) => {
             runValidators: true,
             new: true,
         });
+
+        if (req.body.state === 'end' && !endTeam(team.memberID, req.params.teamID))
+            throw new Error('Member State Change Failed');
+
         if (team === null || team === undefined) throw new Error('Invalid Team ID');
         res.status(200).json({
             success: true,
