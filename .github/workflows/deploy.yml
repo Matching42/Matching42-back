@@ -18,7 +18,9 @@ jobs:
           port: ${{ secrets.REMOTE_SSH_PORT }}
           script: |
             cd /home/ubuntu/Matching42-back
-            sudo git pull origin env/#173
             sudo apt-get install -y npm
+            sudo git pull origin env/#173
             npm install
+            npm install forever -g
+            npm install -g ts-node
             npm run deployment
