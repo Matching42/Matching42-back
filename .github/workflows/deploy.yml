@@ -19,5 +19,6 @@ jobs:
           script: |
             cd /home/ubuntu/Matching42-back
             sudo git pull origin env/#173
+            sudo apt-get install -y npm
             npm install
             npm run deployment
