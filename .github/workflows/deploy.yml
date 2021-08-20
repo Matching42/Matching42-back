@@ -1,8 +1,8 @@
 name: SERVER deploy
 
 on:
-  push:
-    branches: [ main ]
+  pull_request:
+    branches: [ develoment ]
 
 jobs:
   build:
