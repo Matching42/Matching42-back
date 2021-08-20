@@ -2,7 +2,7 @@ name: SERVER deploy
 
 on:
   pull_request:
-    branches: [ develoment ]
+    branches: [ development ]
 
 jobs:
   build:
