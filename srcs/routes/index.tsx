@@ -10,7 +10,7 @@ const router = Router();
 */
 router.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 router.get('/', async (req, res) => {
-    res.json({ data: 'test' });
+    res.json({ data: 'test1' });
 });
 router.get('/login/42', login);
 router.get('/login/redirect', granted);
