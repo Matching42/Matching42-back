@@ -23,3 +23,4 @@ jobs:
             npm install
             pwd
             ls
+            forever restart -v -c ts-node ./srcs/index.tsx
