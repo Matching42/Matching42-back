@@ -2,6 +2,7 @@ import { RequestHandler } from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
 import { findOneTeam, findOneUser } from '../lib';
+import getGitName from '../lib/lib.getGitName';
 
 dotenv.config();
 
@@ -43,23 +44,6 @@ const sendInvitation = async (gitRepoName, memberID) => {
         }
     }
     if (Object.keys(result).length != 0) throw { name: 'Error', message: result };
-};
-
-const getGitName = async (gitLink) => {
-    const gitRepoName = gitLink[gitLink.length - 1];
-    try {
-        await axios({
-            method: 'get',
-            url: `https://api.github.com/repos/${process.env.ORG_NAME}/${gitRepoName}`,
-            headers: {
-                Accept: 'application/vnd.github.v3+json',
-                Authorization: `token ${process.env.GIT_TOKEN}`,
-            },
-        });
-        return gitRepoName;
-    } catch (e) {
-        throw new Error(`team repository : ${gitRepoName} does not exist in github`);
-    }
 };
 
 const inviteToRepo: RequestHandler = async (req, res) => {

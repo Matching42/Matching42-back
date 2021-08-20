@@ -1,6 +1,6 @@
 /**
  * @swagger
- * team/invitetorepo/{teamID}/{userID}:
+ * /team/invitetorepo/{teamID}/{userID}:
  *  post:
  *      description: 팀의 깃 저장소에 유저를 초재하는 API입니다.
  *      parameters:

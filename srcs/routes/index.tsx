@@ -29,5 +29,6 @@ router.patch('/team/:teamID', controller.updateTeam);
 router.patch('/team/tag/:teamID', controller.updateTeamTag);
 router.post('/team/invitetorepo/:teamID/:userID?', controller.inviteToRepo);
 router.get('/subjectPDF/:subject', controller.getSubjectPDF);
+router.get('/github/user/:userID', controller.checkGitInvite);
 
 export default router;
