@@ -1,0 +1,22 @@
+name: server-CI
+on:
+  pull_request:
+    branches: development
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: npm Install
+        run: npm install
+
+      - name: run test
+        run: npm run test
+
+      - name: Check Build
+        run: npm run build
+        enc:
+          CI: true

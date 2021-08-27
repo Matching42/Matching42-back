@@ -6,6 +6,8 @@
   "scripts": {
     "start": "nodemon --exec ts-node ./srcs/index.tsx",
     "test": "jest",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
     "deployment":"forever restart -v -c ts-node ./srcs/index.tsx"
   },
   "repository": {
