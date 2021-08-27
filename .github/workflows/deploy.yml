@@ -1,26 +1,26 @@
-name: SERVER deploy
+# name: SERVER deploy
 
-on:
-  pull_request:
-    branches: [ development ]
+# on:
+#   pull_request:
+#     branches: [ development ]
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Deploy
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.REMOTE_IP }}
-          sync: true
-          username: ${{ secrets.REMOTE_SSH_ID }}
-          key: ${{ secrets.REMOTE_SSH_KEY }}
-          port: ${{ secrets.REMOTE_SSH_PORT }}
-          script: |
-            cd /home/ubuntu/Matching42-back
-            sudo git pull origin env/#173
-            npm install
-            pwd
-            ls
-            npm forever restart -v -c ts-node ./srcs/index.tsx
+#     steps:
+#       - name: Deploy
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.REMOTE_IP }}
+#           sync: true
+#           username: ${{ secrets.REMOTE_SSH_ID }}
+#           key: ${{ secrets.REMOTE_SSH_KEY }}
+#           port: ${{ secrets.REMOTE_SSH_PORT }}
+#           script: |
+#             cd /home/ubuntu/Matching42-back
+#             sudo git pull origin env/#173
+#             npm install
+#             pwd
+#             ls
+#             npm forever restart -v -c ts-node ./srcs/index.tsx
