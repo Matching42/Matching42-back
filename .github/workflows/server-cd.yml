@@ -34,7 +34,7 @@ jobs:
         run: npm build
       
       - name: Clean
-        run: npm clean
+        run: npm run clean
 
       - name: zip 생성
         run: zip -qq -r ./server-sorce.zip .
