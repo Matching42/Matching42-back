@@ -1,21 +1,25 @@
 #!/usr/bin/env bash
 
+
 REPOSITORY=/home/ubuntu/Matching42-back
 cd $REPOSITORY
-npm install
+cp /home/ubuntu/.env $REPOSITORY
+sudo rm -rf ./node_modules
+sudo npm install
+sudo npm install forever -g
+sudo npm install -g ts-node
 
 APP_NAME=Matching42
-SERVER_PATH=/home/ubuntu/Matching42-back/srcs/index.tsx
 CURRENT_PID=$(pgrep -f $APP_NAME)
 
 if [ -z $CURRENT_PID ]
 then
   echo "> 종료할것 없음."
 else
-  echo "> kill -15 $CURRENT_PID"
-  kill -15 $CURRENT_PID
+  echo "> kill -9 $CURRENT_PID"
+  kill -9 $CURRENT_PID
   sleep 5
 fi
 
 echo ">Matching42 배포"
-forever start -v -c ts-node $SERVER_PATH --name Matching42 > /dev/null 2> /dev/null < /dev/null &
+sudo forever start -v -c ts-node ./srcs/index.tsx --name Matching42
