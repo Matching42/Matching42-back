@@ -37,11 +37,11 @@ jobs:
         run: npm run clean
 
       - name: zip 생성
-        run: zip -qq -r ./server-sorce.zip .
+        run: zip -qq -r ./server.zip .
         shell: bash
 
       - name: S3 업로드
-        run: aws deploy push --application-name server-cd --description "Matching42-server" --s3-location s3://elasticbeanstalk-ap-northeast-2-209583696447/server-sorce.zip --source .
+        run: aws deploy push --application-name server-cd --description "Matching42-server" --s3-location s3://elasticbeanstalk-ap-northeast-2-209583696447/server.zip --source .
 
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name server-cd --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name Matching42-server-cd --s3-location bucket=elasticbeanstalk-ap-northeast-2-209583696447,bundleType=zip,key=/server-sorce.zip
+        run: aws deploy create-deployment --application-name server-cd --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name Matching42-server-cd --s3-location bucket=elasticbeanstalk-ap-northeast-2-209583696447,bundleType=zip,key=server.zip
