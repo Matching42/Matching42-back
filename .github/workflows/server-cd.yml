@@ -44,4 +44,4 @@ jobs:
         run: aws deploy push --application-name server-cd --description "Matching42-server" --s3-location s3://elasticbeanstalk-ap-northeast-2-209583696447/server-sorce.zip --source .
 
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name server-cd --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name Matching42-server-cd --s3-location bucket=elasticbeanstalk-ap-northeast-2-209583696447,bundleType=zip,key=./server-sorce.zip
+        run: aws deploy create-deployment --application-name server-cd --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name Matching42-server-cd --s3-location bucket=elasticbeanstalk-ap-northeast-2-209583696447,bundleType=zip,key=/server-sorce.zip
