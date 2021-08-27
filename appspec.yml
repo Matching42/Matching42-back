@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+
+files:
+  - source: /
+    destination: /home/ubuntu/Matching42-back
+
+permissions:
+  - object: /home/ubuntu/Matching42-back
+    owner: ubuntu
+    group: ubuntu
+    mode: 755
+
+hooks:
+  AfterInstall:
+    - location: deploy-server.sh
+      timeout: 60
+      runas: root
