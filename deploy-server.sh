@@ -18,4 +18,4 @@ else
 fi
 
 echo ">Matching42 배포"
-forever start -v -c ts-node $SERVER_PATH --name Matching42
+forever start -v -c ts-node $SERVER_PATH --name Matching42 > /dev/null 2> /dev/null < /dev/null &
