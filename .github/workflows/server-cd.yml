@@ -1,7 +1,7 @@
 name: server-CD
 on:
-  pull_request:
-    branches: development
+  push:
+    branches: master
 
 jobs:
   deploy:
