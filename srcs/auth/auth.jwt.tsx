@@ -12,6 +12,7 @@ const getToken = (req: Request): string | undefined => {
     return authField.split(' ')[1];
 };
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 const decodeToken = (token: string): string | object | undefined => {
     try {
         const decode = jwt.verify(token, process.env.JWT as string);

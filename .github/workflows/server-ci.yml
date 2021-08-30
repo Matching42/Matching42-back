@@ -12,10 +12,13 @@ jobs:
 
       - name: npm Install
         run: npm install
+      
+      - name: run lint
+        run: npm run lint
 
       - name: run test
         run: npm run test
-
+      
       - name: Check Build
         run: npm run build
         env:
