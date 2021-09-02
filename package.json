@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --exec ts-node ./srcs/index.tsx",
-    "test": "jest"
+    "test": "jest",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
+    "lint": "node_modules/.bin/eslint srcs/",
+    "deployment":"forever restart -v -c ts-node ./srcs/index.tsx"
   },
   "repository": {
     "type": "git",
