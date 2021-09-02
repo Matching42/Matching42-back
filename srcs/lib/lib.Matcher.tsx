@@ -2,6 +2,7 @@ import { Team } from '../models';
 import { Waitlist } from '../models';
 import { User } from '../models';
 import { createGitRepo, createNotionPage, sendSlackMessage } from '../lib';
+import { logger } from '../config/winston';
 
 const makeTeam = async (subject: string, state: string, user, teamID): Promise<void> => {
     const team = new Team({
@@ -16,6 +17,7 @@ const makeTeam = async (subject: string, state: string, user, teamID): Promise<v
         teamName: teamID,
     });
     for (let i = 0; i < 3 && (await sendSlackMessage(team)) === false; i++);
+    logger.info(team);
     await team.save();
 };
 
@@ -57,16 +59,18 @@ const matching = async (subject, user, min: number, max: number): Promise<void> 
             user.splice(0, matchingNumber);
         }
     } catch (error) {
-        console.error(error);
+        logger.error(error);
     }
 };
 
 const Matcher = async (): Promise<void> => {
+    logger.info(`Matching start ${Date()}`);
     const matchingSubject = await User.find()
         .distinct('waitMatching')
         .catch((err) => console.error(err));
     for (const subject of matchingSubject) {
         if (subject === null || subject === undefined) continue;
+        logger.info(subject);
         const matchingUser = await User.find().where('waitMatching', subject).sort('cluster');
         if (subject === 'minishell' || subject === 'miniRT' || subject === 'cub3d')
             await matching(subject, matchingUser, 4, 4);
@@ -75,6 +79,7 @@ const Matcher = async (): Promise<void> => {
         else if (subject === 'ft_transcendence') await matching(subject, matchingUser, 3, 5);
         else await matching(subject, matchingUser, 3, 3);
     }
+    logger.info(`Matcing end ${Date}`);
 };
 
 export default Matcher;
