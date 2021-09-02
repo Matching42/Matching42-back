@@ -69,11 +69,11 @@ const Matcher = async (): Promise<void> => {
         if (subject === null || subject === undefined) continue;
         const matchingUser = await User.find().where('waitMatching', subject).sort('cluster');
         if (subject === 'minishell' || subject === 'miniRT' || subject === 'cub3d')
-            matching(subject, matchingUser, 4, 4);
+            await matching(subject, matchingUser, 4, 4);
         else if (subject === 'webserv' || subject === 'ft_irc')
-            matching(subject, matchingUser, 4, 5);
-        else if (subject === 'ft_transcendence') matching(subject, matchingUser, 3, 5);
-        else matching(subject, matchingUser, 3, 3);
+            await matching(subject, matchingUser, 4, 5);
+        else if (subject === 'ft_transcendence') await matching(subject, matchingUser, 3, 5);
+        else await matching(subject, matchingUser, 3, 3);
     }
 };
 
