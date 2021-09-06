@@ -13,6 +13,6 @@ const runServer = async () => {
     app.listen(process.env.PORT, () => logger.info(`server Run with port: ${process.env.PORT}`));
 };
 
-const cancleMatchSchedule = Scheduler(5, 17, 0, 60 * 60 * 24 * 7, Matcher);
+const cancleMatchSchedule = Scheduler(1, 12, 0, 60 * 60 * 24 * 7, Matcher);
 
 runServer();
