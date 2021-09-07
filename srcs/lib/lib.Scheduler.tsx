@@ -21,8 +21,14 @@ const checkError = (
     }
 };
 
+const getToday = (): Date => {
+    let today = new Date();
+    today = new Date(today.getTime() + today.getTimezoneOffset() * 60 * 1000 + 9 * 60 * 60 * 1000);
+    return today;
+};
+
 const getTargetDate = (startDayOfWeek: number, startHour: number, startMin: number): Date => {
-    const today = new Date();
+    const today = getToday();
     const targetDate = new Date();
     targetDate.setHours(startHour);
     targetDate.setMinutes(startMin);
