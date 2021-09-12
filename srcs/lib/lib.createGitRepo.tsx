@@ -19,7 +19,7 @@ const createGitRepo: (subject: string, ID: string) => Promise<string | null> = a
             data: {
                 name: `Matching42_${subject}_${ID}`,
                 auto_init: true,
-                private: true,
+                private: false,
             },
         });
         return createResult.data.html_url;
