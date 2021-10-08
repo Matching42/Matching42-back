@@ -17,7 +17,7 @@ const createGitRepo: (subject: string, ID: string) => Promise<string | null> = a
                 Authorization: `token ${process.env.GIT_TOKEN}`,
             },
             data: {
-                name: `Matching42_${subject}_${ID}`,
+                name: `Matching42_${ID}`,
                 auto_init: true,
                 private: true,
             },
