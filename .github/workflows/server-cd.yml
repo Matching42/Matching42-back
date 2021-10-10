@@ -1,6 +1,6 @@
 name: server-CD
 on:
-  psuh:
+  push:
     branches: development
 
 jobs:
