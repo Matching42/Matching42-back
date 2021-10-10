@@ -1,6 +1,6 @@
 name: server-CD
 on:
-  pull_request:
+  psuh:
     branches: development
 
 jobs:
