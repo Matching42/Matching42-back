@@ -6,8 +6,9 @@ cd $REPOSITORY
 cp /home/ubuntu/.env $REPOSITORY
 sudo rm -rf ./node_modules
 sudo npm install
-sudo npm install forever -g
+sudo npm -g install forever deep-equal@1.1.1
 sudo npm install -g ts-node
+sudo npm install typescript -g
 
 APP_NAME=Matching42
 CURRENT_PID=$(pgrep -f $APP_NAME)
