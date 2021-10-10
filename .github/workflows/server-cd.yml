@@ -1,6 +1,6 @@
 name: server-CD
 on:
-  push:
+  pull_request:
     branches: development
 
 jobs:
