@@ -19,6 +19,7 @@ router.get('/login/fail', fail);
 //router.use(isAuth);
 router.get('/user', controller.getAllUser);
 router.get('/user/:userID', controller.getOneUser);
+router.patch('/user/:userID', controller.updateUser);
 router.get('/waitlist', controller.getWaitlist);
 router.post('/waitlist', controller.addUser2WaitList);
 router.delete('/waitlist/:userID', controller.removeUser2WaitList);
