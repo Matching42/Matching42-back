@@ -22,7 +22,7 @@
  *                      type: array
  *                      items:
  *                          type: string
- *                  gitID:
+ *                  gitName:
  *                      type: string
  *                  cluster:
  *                      type: string
