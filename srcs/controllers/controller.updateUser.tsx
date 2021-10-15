@@ -1,10 +1,14 @@
 import { RequestHandler } from 'express';
 import { User } from '../models';
+import { findOneTeam } from '../lib';
 
 const updateUser: RequestHandler = async (req, res) => {
     try {
         const updateData = {};
-        if (req.body.teamID !== undefined) updateData['teamID'] = req.body.teamID;
+        if (req.body.teamID !== undefined) {
+            await findOneTeam(req.body.teamID);
+            updateData['teamID'] = req.body.teamID;
+        }
         if (req.body.waitMatching !== undefined) updateData['waitMatching'] = req.body.waitMatching;
         if (req.body.gitName !== undefined) updateData['gitName'] = req.body.gitName;
         if (req.body.cluster !== undefined) updateData['cluster'] = req.body.cluster;
