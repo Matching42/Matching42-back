@@ -24,7 +24,7 @@ const createGitRepo: (subject: string, ID: string) => Promise<string | null> = a
         });
         return createResult.data.html_url;
     } catch (e) {
-        logger.error(e.message);
+        logger.error(e);
         return null;
     }
 };

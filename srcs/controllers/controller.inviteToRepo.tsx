@@ -21,6 +21,7 @@ const checkUserError = async (user) => {
     try {
         await axios.get(`https://api.github.com/users/${user.gitName}`);
     } catch (e) {
+        logger.error(e);
         throw new Error(`User:${user.gitName} does not Exist in github`);
     }
 };
@@ -62,6 +63,7 @@ const inviteToRepo: RequestHandler = async (req, res) => {
             success: true,
         });
     } catch (e) {
+        logger.error(e);
         res.status(400).json({
             success: false,
             error: {

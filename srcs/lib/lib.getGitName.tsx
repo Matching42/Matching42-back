@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { logger } from '../config/winston';
 
 const getGitName: (gitLink: string[]) => Promise<string> = async (gitLink) => {
     const gitRepoName = gitLink[gitLink.length - 1];
@@ -13,6 +14,7 @@ const getGitName: (gitLink: string[]) => Promise<string> = async (gitLink) => {
         });
         return gitRepoName;
     } catch (e) {
+        logger.error(e);
         throw new Error(`team repository : ${gitRepoName} does not exist in github`);
     }
 };
