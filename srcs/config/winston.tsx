@@ -7,7 +7,7 @@ dotenv.config();
 
 const logDir = `${appRoot}/logs`;
 
-const { combine, timestamp, printf } = winston.format;
+const { combine, timestamp, printf, errors } = winston.format;
 
 // Define log format
 const logFormat = printf((info) => {
@@ -20,6 +20,7 @@ const logFormat = printf((info) => {
  */
 const logger = winston.createLogger({
     format: combine(
+        errors({ stack: true }),
         timestamp({
             format: 'YYYY-MM-DD HH:mm:ss',
         }),
