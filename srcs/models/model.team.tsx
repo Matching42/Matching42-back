@@ -22,11 +22,11 @@ const teamSchema = new Schema({
         enum: TeamState,
     },
     startDate: { type: Date },
-    notionLink: { type: String, unique: true },
-    gitLink: { type: String, unique: true },
+    notionLink: { type: String },
+    gitLink: { type: String },
     teamName: { type: String, unique: true },
-    description: {type: String},
-    tag: [{type: String}],
+    description: { type: String },
+    tag: [{ type: String }],
 });
 
 export default mongoose.model('team', teamSchema, 'Team');

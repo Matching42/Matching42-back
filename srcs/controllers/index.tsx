@@ -1,12 +1,13 @@
 export { default as getOneUser } from './controller.getOneUser';
 export { default as getAllUser } from './controller.getAllUser';
+export { default as updateUser } from './controller.updateUser';
 export { default as addUser2Team } from './controller.addUser2Team';
 export { default as addUser2WaitList } from './controller.addUser2Waitlist';
 export { default as getTeam } from './controller.getTeam';
 export { default as removeUser2WaitList } from './controller.removeUser2WaitList';
-export { default as createGitRepo } from './controller.createGitRepo';
 export { default as getWaitlist } from './controller.getWaitlist';
 export { default as inviteToRepo } from './controller.inviteToRepo';
 export { default as updateTeam } from './controller.updateTeam';
 export { default as updateTeamTag } from './controller.updateTeamTag';
 export { default as getSubjectPDF } from './controller.getSubjectPDF';
+export { default as checkGitInvite } from './controller.checkGitInvite';

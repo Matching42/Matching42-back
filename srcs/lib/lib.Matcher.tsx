@@ -1,151 +1,85 @@
 import { Team } from '../models';
 import { Waitlist } from '../models';
 import { User } from '../models';
+import { createGitRepo, createNotionPage, sendSlackMessage } from '../lib';
+import { logger } from '../config/winston';
+
+const makeTeam = async (subject: string, state: string, user, teamID): Promise<void> => {
+    const team = new Team({
+        ID: teamID,
+        leaderID: user[0],
+        memberID: user,
+        subject: subject,
+        state: state,
+        startDate: Date.now(),
+        notionLink: await createNotionPage(teamID, subject, user),
+        gitLink: await createGitRepo(subject, teamID),
+        teamName: teamID,
+    });
+    for (let i = 0; i < 3 && (await sendSlackMessage(team)) === false; i++);
+    logger.info(team);
+    await team.save();
+};
+
+const updateUser = (userID: string[], teamName: string) => {
+    userID.forEach(async (Id) => {
+        await User.updateOne(
+            { ID: Id },
+            { $set: { waitMatching: null, teamID: teamName, deadline: null } }
+        );
+    });
+};
+
+const updateWaitlist = async (subject, userList): Promise<void> => {
+    userList.forEach(async (ID) => {
+        await Waitlist.updateOne({ subjectName: subject }, { $pull: { user: { userID: ID } } });
+    });
+};
+
+const genTeamName = (subject: string, user: string): string => {
+    return `${subject}_${user}_${Date.now()}`;
+};
+
+function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min; //최댓값도 포함, 최솟값도 포함
+}
+
+const matching = async (subject, user, min: number, max: number): Promise<void> => {
+    try {
+        while (user.length > 0) {
+            const matchingNumber: number = getRandomIntInclusive(min, max);
+            const userID: string[] = user.slice(0, matchingNumber).map((user) => user.ID);
+            const teamName: string = genTeamName(subject, userID[0]);
+            const state: string = userID.length >= min ? 'progress' : 'wait_member';
+            await makeTeam(subject, state, userID, teamName);
+            await updateUser(userID, teamName);
+            await updateWaitlist(subject, userID);
+            user.splice(0, matchingNumber);
+        }
+    } catch (error) {
+        logger.error(error);
+    }
+};
 
 const Matcher = async (): Promise<void> => {
-    const allWaitlist = await Waitlist.find({});
-    const matchSubject: Array<string> = [];
-    for (let i = 0; i < allWaitlist.length; i++) {
-        let flag = 0;
-        for (let j = 0; j < matchSubject.length; j++) {
-            if (matchSubject[j] === allWaitlist[i].subjectName) {
-                flag = 1;
-            }
-        }
-        if (flag === 0) {
-            matchSubject.push(allWaitlist[i].subjectName);
-        }
+    logger.info(`Matching start ${Date()}`);
+    const matchingSubject = await User.find()
+        .distinct('waitMatching')
+        .catch((err) => console.error(err));
+    for (const subject of matchingSubject) {
+        if (subject === null || subject === undefined) continue;
+        logger.info(subject);
+        const matchingUser = await User.find().where('waitMatching', subject).sort('cluster');
+        if (subject === 'minishell' || subject === 'miniRT' || subject === 'cub3d')
+            await matching(subject, matchingUser, 4, 4);
+        else if (subject === 'webserv' || subject === 'ft_irc')
+            await matching(subject, matchingUser, 4, 5);
+        else if (subject === 'ft_transcendence') await matching(subject, matchingUser, 3, 5);
+        else await matching(subject, matchingUser, 3, 3);
     }
-    for (let i = 0; i < matchSubject.length; i++) {
-        const matchUser = allWaitlist.find({ subject: matchSubject[i] });
-        for (let i = 0; i < matchUser.length; i++) {
-            const user = await User.findOne({ ID: matchUser.user.userID });
-            matchUser[i].cluster = user.cluster;
-            if (user.cluster === null) {
-                matchUser[i].cluster = '개포';
-            }
-        }
-        while (matchUser.length) {
-            if (
-                matchUser.length === 3 ||
-                (matchUser.filter({ cluster: '개포' }).length === 2 &&
-                    matchUser.filter({ cluster: '서초 ' }) === 2)
-            ) {
-                await new Team({
-                    ID: matchSubject[i] + '_' + matchUser[0].user.userID,
-                    leaderID: matchUser[0].user.userID,
-                    memberID: [matchUser[1].user.userID, matchUser[2].user.userID],
-                    subject: matchSubject[i],
-                    state: 'progress',
-                    startDate: Date.now(),
-                    notionLink: '',
-                    gitLink: '',
-                    teamName: matchSubject[i] + '_' + matchUser[0].user.userID,
-                }).save;
-                for (let j = 0; j < 3; j++) {
-                    await User.findOneAndUpdate(
-                        { ID: matchUser[j].user.userID },
-                        {
-                            waitMatching: null,
-                            teamID: matchSubject[i] + '_' + matchUser[0].user.userID,
-                        },
-                        { new: true }
-                    );
-                    await Waitlist.findOneAndRemove({ user: matchUser[j].user });
-                    matchUser.splice(0, 1);
-                }
-            } else if (matchUser.length < 3) {
-                await new Team({
-                    ID: matchSubject[i] + '_' + matchUser[0].user.userID,
-                    leaderID: matchUser[0].user.userID,
-                    memberID: [matchUser[1].user.userID, matchUser[2].user.userID],
-                    subject: matchSubject[i],
-                    state: 'wait_member',
-                    startDate: Date.now(),
-                    notionLink: '',
-                    gitLink: '',
-                    teamName: matchSubject[i] + '_' + matchUser[0].user.userID,
-                }).save;
-                for (let j = 0; j < matchUser.length; j++) {
-                    await User.findOneAndUpdate(
-                        { ID: matchUser[j].user.userID },
-                        {
-                            waitMatching: null,
-                            teamID: matchSubject[i] + '_' + matchUser[0].user.userID,
-                        },
-                        { new: true }
-                    );
-                    await Waitlist.findOneAndRemove({ user: matchUser[j].user });
-                    matchUser.splice(0, 1);
-                }
-            } else if (matchUser.length > 3) {
-                const cluster1 = matchUser.filter({ cluster: '개포' });
-                const cluster2 = matchUser.filter({ cluster: '서초' });
-                if (cluster1.length >= 3) {
-                    await new Team({
-                        ID: matchSubject[i] + '_' + cluster1[0].user.userID,
-                        leaderID: cluster1[0].user.userID,
-                        memberID: [cluster1[1].user.userID, cluster1[2].user.userID],
-                        subject: matchSubject[i],
-                        state: 'progress',
-                        startDate: Date.now(),
-                        notionLink: '',
-                        gitLink: '',
-                        teamName: matchSubject[i] + '_' + cluster1[0].user.userID,
-                    }).save;
-                    for (let j = 0; j < 3; j++) {
-                        await User.findOneAndUpdate(
-                            { ID: cluster1[j].user.userID },
-                            {
-                                waitMatching: null,
-                                teamID: matchSubject[i] + '_' + cluster1[0].user.userID,
-                            },
-                            { new: true }
-                        );
-                        await Waitlist.findOneAndRemove({ user: cluster1[j].user });
-                        let flag = 0;
-                        for (let i = 0; flag === 0; i++) {
-                            if (matchUser[i].cluster === '개포') {
-                                matchUser.splice(i, 1);
-                                flag = 1;
-                            }
-                        }
-                    }
-                } else if (cluster2.length >= 3) {
-                    await new Team({
-                        ID: matchSubject[i] + '_' + cluster2[0].user.userID,
-                        leaderID: cluster2[0].user.userID,
-                        memberID: [cluster2[1].user.userID, cluster2[2].user.userID],
-                        subject: matchSubject[i],
-                        state: 'progress',
-                        startDate: Date.now(),
-                        notionLink: '',
-                        gitLink: '',
-                        teamName: matchSubject[i] + '_' + cluster2[0].user.userID,
-                    }).save;
-                    for (let j = 0; j < 3; j++) {
-                        await User.findOneAndUpdate(
-                            { ID: cluster2[j].user.userID },
-                            {
-                                waitMatching: null,
-                                teamID: matchSubject[i] + '_' + cluster2[0].user.userID,
-                            },
-                            { new: true }
-                        );
-                        await Waitlist.findOneAndRemove({ user: cluster2[j].user });
-                        let flag = 0;
-                        for (let i = 0; flag === 0; i++) {
-                            if (matchUser[i].cluster === '서초') {
-                                matchUser.splice(i, 1);
-                                flag = 1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return;
+    logger.info(`Matcing end ${Date}`);
 };
 
 export default Matcher;

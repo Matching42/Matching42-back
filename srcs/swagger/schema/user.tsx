@@ -18,7 +18,11 @@
  *                      type: string
  *                  teamID:
  *                      type: string
- *                  gitID:
+ *                  endTeamList:
+ *                      type: array
+ *                      items:
+ *                          type: string
+ *                  gitName:
  *                      type: string
  *                  cluster:
  *                      type: string

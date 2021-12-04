@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
 import { findOneUser, findOneTeam } from '../lib';
 import { Team, User } from '../models';
+import axios from 'axios';
 
 const errorCheck = (user, team) => {
     if (team.memberID.indexOf(user.ID) !== -1) throw new Error('The User already exists');
@@ -13,6 +14,10 @@ const addUser2Team: RequestHandler = async (req, res) => {
         const team = await findOneTeam(req.body.teamID);
         errorCheck(user, team);
 
+        await axios.get(`https://api.github.com/users/${req.body.gitName}`).catch((err) => {
+            throw new Error(`github API ${err.message}`);
+        });
+
         const updatedTeam = await Team.findOneAndUpdate(
             { ID: team.ID },
             { $push: { memberID: user.ID } },
@@ -20,7 +25,7 @@ const addUser2Team: RequestHandler = async (req, res) => {
         );
         const updatedUser = await User.findOneAndUpdate(
             { ID: user.ID },
-            { $set: { teamID: team.ID } },
+            { $set: { teamID: team.ID, gitName: req.body.gitName } },
             { new: true }
         );
         res.status(200).json({

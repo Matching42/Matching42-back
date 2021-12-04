@@ -1,19 +1,19 @@
 /**
  * @swagger
- * team/creategitrepo/{teamID}:
- *  post:
- *      description: 팀의 깃 저장소를 생성하는 API입니다.
+ * /github/user/{userID}:
+ *  get:
+ *      description: 팀의 깃 저장소에 유저가 초대되어있는지 확인하는 API입니다.
  *      parameters:
  *      - in: path
- *        name: teamID
- *        required: true
+ *        name:  userID
+ *        required: false
  *        schema:
  *          type: string
  *          minimum: 1
- *        description: 깃 저장소를 생성할 팀의 id 입니다.
+ *        description: 초대되어있는지 확인할 유저의 id 입니다.
  *      responses:
  *          200:
- *              description: 팀의 깃 저장소를 성공적으로 생성했을 경우 다음 결과가 반환됩니다.
+ *              description: 대상을 성공적으로 확인했을 경우 다음 결과가 반환됩니다.
  *              content:
  *                  application/json:
  *                      schema:
@@ -21,15 +21,11 @@
  *                          properties:
  *                            success:
  *                              type: boolean
- *                            team:
- *                              $ref: "#/components/schemas/Team"
+ *                            exist:
+ *                              type: boolean
  *          400:
  *              description: |
- *                오류가 발생해 팀의 깃 저장소를 성공적으로 생성하지 못했을 경우 다음 결과가 반환됩니다.</br></br>
- *                -오류 예시</br>
- *                - teamId에 해당하는 팀이 없음</br>
- *                - 팀에 subject가 없음</br>
- *                - 팀에 이미 깃 링크가 있음
+ *                오류가 발생해 성공적으로 확인하지 못했을 경우 다음 결과가 반환됩니다.</br></br>
  *              content:
  *                  application/json:
  *                      schema:
@@ -42,10 +38,11 @@
  *                               code:
  *                                 type: string
  *                               message:
- *                                 type: string
+ *                                 properties:
+ *                                   userID: string
  *                          example:
  *                            success: false
  *                            error:
- *                              code: Team already has a gitLink
- *                              message: Team already has a gitLink
+ *                              code: "Error"
+ *                              message: "Invalid TeamID"
  */

@@ -2,6 +2,8 @@ import { RequestHandler } from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
 import { findOneTeam, findOneUser } from '../lib';
+import getGitName from '../lib/lib.getGitName';
+import { logger } from '../config/winston';
 
 dotenv.config();
 
@@ -19,6 +21,7 @@ const checkUserError = async (user) => {
     try {
         await axios.get(`https://api.github.com/users/${user.gitName}`);
     } catch (e) {
+        logger.error(e);
         throw new Error(`User:${user.gitName} does not Exist in github`);
     }
 };
@@ -36,30 +39,14 @@ const sendInvitation = async (gitRepoName, memberID) => {
                     'Content-Type': 'application/json',
                     Authorization: `token ${process.env.GIT_TOKEN}`,
                 },
-                data: { permission: 'write' },
+                data: { permission: 'admin' },
             });
         } catch (e) {
+            logger.error(e);
             result[userID] = e.message;
         }
     }
     if (Object.keys(result).length != 0) throw { name: 'Error', message: result };
-};
-
-const getGitName = async (gitLink) => {
-    const gitRepoName = gitLink[gitLink.length - 1];
-    try {
-        await axios({
-            method: 'get',
-            url: `https://api.github.com/repos/${process.env.ORG_NAME}/${gitRepoName}`,
-            headers: {
-                Accept: 'application/vnd.github.v3+json',
-                Authorization: `token ${process.env.GIT_TOKEN}`,
-            },
-        });
-        return gitRepoName;
-    } catch (e) {
-        throw new Error(`team repository : ${gitRepoName} does not exist in github`);
-    }
 };
 
 const inviteToRepo: RequestHandler = async (req, res) => {
@@ -76,6 +63,7 @@ const inviteToRepo: RequestHandler = async (req, res) => {
             success: true,
         });
     } catch (e) {
+        logger.error(e);
         res.status(400).json({
             success: false,
             error: {

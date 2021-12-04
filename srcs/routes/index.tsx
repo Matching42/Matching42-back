@@ -19,6 +19,7 @@ router.get('/login/fail', fail);
 //router.use(isAuth);
 router.get('/user', controller.getAllUser);
 router.get('/user/:userID', controller.getOneUser);
+router.patch('/user/:userID', controller.updateUser);
 router.get('/waitlist', controller.getWaitlist);
 router.post('/waitlist', controller.addUser2WaitList);
 router.delete('/waitlist/:userID', controller.removeUser2WaitList);
@@ -27,8 +28,8 @@ router.get('/team', controller.getTeam);
 router.get('/team/:teamID', controller.getTeam);
 router.patch('/team/:teamID', controller.updateTeam);
 router.patch('/team/tag/:teamID', controller.updateTeamTag);
-router.post('/team/creategitrepo/:teamID', controller.createGitRepo);
 router.post('/team/invitetorepo/:teamID/:userID?', controller.inviteToRepo);
 router.get('/subjectPDF/:subject', controller.getSubjectPDF);
+router.get('/github/user/:userID', controller.checkGitInvite);
 
 export default router;

@@ -1,3 +1,5 @@
+import { logger } from '../config/winston';
+
 const checkError = (
     startDayOfWeek: number,
     startHour: number,
@@ -21,15 +23,30 @@ const checkError = (
     }
 };
 
-const getTargetDate = (startDayOfWeek: number, startHour: number, startMin: number): Date => {
-    const today = new Date();
-    const targetDate = new Date();
+const getKoreaDate = (date): Date => {
+    date = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000 + 9 * 60 * 60 * 1000);
+    return date;
+};
+
+const getTargetDate = (
+    startDayOfWeek: number,
+    startHour: number,
+    startMin: number,
+    intervalSecond: number
+): Date => {
+    const today = getKoreaDate(new Date());
+    let targetDate = getKoreaDate(new Date());
+
     targetDate.setHours(startHour);
     targetDate.setMinutes(startMin);
     targetDate.setSeconds(0);
-    if (targetDate.getTime() - today.getTime() < 0) targetDate.setDate(targetDate.getDate() + 1);
+
+    while (targetDate.getTime() - today.getTime() < 0)
+        targetDate = new Date(targetDate.getTime() + intervalSecond * 1000);
+
     if (targetDate.getDay() != startDayOfWeek)
         targetDate.setDate(targetDate.getDate() + ((startDayOfWeek - targetDate.getDay() + 7) % 7));
+
     return targetDate;
 };
 
@@ -41,17 +58,24 @@ const Scheduler = (
     callback: () => void
 ): (() => void) => {
     checkError(startDayOfWeek, startHour, startMin, intervalSecond);
+
     let timerId;
-    const today = new Date();
-    const targetDate = getTargetDate(startDayOfWeek, startHour, startMin);
+    const today = getKoreaDate(new Date());
+    const targetDate = getTargetDate(startDayOfWeek, startHour, startMin, intervalSecond);
+    const targetTimeInterval = targetDate.getTime() - today.getTime();
 
     const request = () => {
         callback();
         timerId = setTimeout(request, intervalSecond * 1000);
     };
 
-    timerId = setTimeout(request, targetDate.getTime() - today.getTime());
+    logger.info(
+        `스케줄러 설정됨: ${new Date(
+            new Date().getTime() + targetTimeInterval
+        )}\n\t한국기준: ${targetDate}`
+    );
 
+    timerId = setTimeout(request, targetTimeInterval);
     return () => {
         clearTimeout(timerId);
     };
