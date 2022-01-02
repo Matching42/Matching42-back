@@ -6,7 +6,7 @@ import { logger } from '../config/winston';
 
 const makeTeam = async (subject: string, state: string, user, teamID): Promise<void> => {
     const team = new Team({
-        ID: teamID,
+        ID: `${teamID}_${Date.now()}`,
         leaderID: user[0],
         memberID: user,
         subject: subject,
@@ -37,7 +37,7 @@ const updateWaitlist = async (subject, userList): Promise<void> => {
 };
 
 const genTeamName = (subject: string, user: string): string => {
-    return `${subject}_${user}_${Date.now()}`;
+    return `${subject}_${user}`;
 };
 
 function getRandomIntInclusive(min, max) {

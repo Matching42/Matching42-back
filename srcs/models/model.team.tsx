@@ -24,7 +24,7 @@ const teamSchema = new Schema({
     startDate: { type: Date },
     notionLink: { type: String },
     gitLink: { type: String },
-    teamName: { type: String, unique: true },
+    teamName: { type: String },
     description: { type: String },
     tag: [{ type: String }],
 });
