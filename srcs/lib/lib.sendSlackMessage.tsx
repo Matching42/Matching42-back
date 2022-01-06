@@ -6,7 +6,8 @@ dotenv.config();
 const BOT_TOKENS = process.env.SLACK_BOT_TOKENS;
 const channelID = process.env.SLACK_CHANNEL_ID;
 
-const sendMsgPromise: (msg: string) => Promise<tSlackdata> = async (msg) => {
+const sendMsgPromise: (msg: string, slackID: string) => Promise<tSlackdata> = async (msg, slackID) => {
+
     return axios({
         method: 'post',
         url: 'https://slack.com/api/chat.postMessage',
@@ -16,13 +17,13 @@ const sendMsgPromise: (msg: string) => Promise<tSlackdata> = async (msg) => {
         },
         data: {
             text: msg,
-            channel: channelID,
+            channel: slackID,
             link_names: true,
         },
     }).then((response) => response.data);
 };
 
-const sendSlackMessage: (team: tTeam) => Promise<boolean> = async (team) => {
+const sendSlackMessage: (team: tTeam, slackID: string[]) => Promise<boolean> = async (team, slackID) => {
     try {
         const msg = `${team.subject} subject에 대한 팀매칭이 완료 되었습니다.
         팀장 : @${team.leaderID}
@@ -30,10 +31,11 @@ const sendSlackMessage: (team: tTeam) => Promise<boolean> = async (team) => {
         notion link : ${team.notionLink}
         github link : ${team.gitLink}`;
 
-        await sendMsgPromise(msg).then((slackResponse) => {
-            if (slackResponse.ok === false) throw new Error(`slack API ${slackResponse.error}`);
-        });
-
+        for (let i = 0; i < slackID.length; i++) {
+            await sendMsgPromise(msg, slackID[i]).then((slackResponse) => {
+                if (slackResponse.ok === false) throw new Error(`slack API ${slackResponse.error}`);
+            });
+        }
         return true;
     } catch (e) {
         console.error(e);

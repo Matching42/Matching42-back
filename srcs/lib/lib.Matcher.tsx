@@ -4,7 +4,7 @@ import { User } from '../models';
 import { createGitRepo, createNotionPage, sendSlackMessage } from '../lib';
 import { logger } from '../config/winston';
 
-const makeTeam = async (subject: string, state: string, user, teamID): Promise<void> => {
+const makeTeam = async (subject: string, state: string, user: string[], slackID: string[], teamID: string): Promise<void> => {
     const team = new Team({
         ID: `${teamID}_${Date.now()}`,
         leaderID: user[0],
@@ -16,7 +16,7 @@ const makeTeam = async (subject: string, state: string, user, teamID): Promise<v
         gitLink: await createGitRepo(subject, teamID),
         teamName: teamID,
     });
-    for (let i = 0; i < 3 && (await sendSlackMessage(team)) === false; i++);
+    for (let i = 0; i < 3 && (await sendSlackMessage(team, slackID)) === false; i++);
     logger.info(team);
     await team.save();
 };
@@ -51,9 +51,10 @@ const matching = async (subject, user, min: number, max: number): Promise<void> 
         while (user.length > 0) {
             const matchingNumber: number = getRandomIntInclusive(min, max);
             const userID: string[] = user.slice(0, matchingNumber).map((user) => user.ID);
+            const slackID: string[] = user.slice(0, matchingNumber).map((user) => user.slackID);
             const teamName: string = genTeamName(subject, userID[0]);
             const state: string = userID.length >= min ? 'progress' : 'wait_member';
-            await makeTeam(subject, state, userID, teamName);
+            await makeTeam(subject, state, userID, slackID, teamName);
             await updateUser(userID, teamName);
             await updateWaitlist(subject, userID);
             user.splice(0, matchingNumber);
