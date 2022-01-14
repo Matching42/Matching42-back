@@ -1,4 +1,4 @@
-import app from './app';
+import createServer from './app';
 import dotenv from 'dotenv';
 import { connectDB } from './config';
 import { logger } from './config/winston';
@@ -6,6 +6,8 @@ import { Scheduler, Matcher } from './lib';
 
 dotenv.config();
 const runServer = async () => {
+    const app = createServer();
+
     logger.info('Chcek DB connection...');
     await connectDB(process.env.DB_URL ? process.env.DB_URL : '');
     /* Run server */
