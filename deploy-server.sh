@@ -23,4 +23,4 @@ else
 fi
 
 echo ">Matching42 배포"
-sudo forever start -v -c ts-node ./srcs/index.tsx --name Matching42
+sudo forever start -v -c ts-node ./srcs/index.ts --name Matching42
