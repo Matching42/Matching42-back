@@ -14,7 +14,7 @@ const options = {
         },
         servers: [{ url: process.env.HOST }],
     },
-    apis: [path.join(__dirname, './schema/*.tsx'), path.join(__dirname, './controller/*.tsx')],
+    apis: [path.join(__dirname, './schema/*.ts'), path.join(__dirname, './controller/*.ts')],
 };
 
 export default swaggerJsdoc(options);

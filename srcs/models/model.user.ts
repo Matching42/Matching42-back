@@ -39,6 +39,10 @@ const userSchema = new mongoose.Schema({
         enum: ['3일', '1주', '2주', '4주', '6주 이상', null],
         default: null,
     },
+    slackID: {
+        type: String,
+        default: null,
+    },
 });
 
 export default mongoose.model('user', userSchema, 'User');

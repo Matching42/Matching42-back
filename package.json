@@ -4,12 +4,12 @@
   "description": "### member - snpark, seolim, hokim, minjakim, kwlee, hyeokim",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec ts-node ./srcs/index.tsx",
+    "start": "nodemon --exec ts-node ./srcs/index.ts",
     "test": "jest",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
     "lint": "node_modules/.bin/eslint srcs/",
-    "deployment":"forever restart -v -c ts-node ./srcs/index.tsx"
+    "deployment":"forever restart -v -c ts-node ./srcs/index.ts"
   },
   "repository": {
     "type": "git",
