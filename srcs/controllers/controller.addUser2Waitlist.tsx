@@ -28,7 +28,7 @@ const addUser2Waitlist: RequestHandler = async (req, res) => {
                 gitName: req.body.gitName,
                 cluster: req.body.cluster,
                 deadline: req.body.deadline,
-                slackID: req.body.slackID
+                slackID: req.body.slackID,
             },
             { new: true, runValidators: true }
         );

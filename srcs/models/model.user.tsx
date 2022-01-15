@@ -41,8 +41,8 @@ const userSchema = new mongoose.Schema({
     },
     slackID: {
         type: String,
-        default: null
-    }
+        default: null,
+    },
 });
 
 export default mongoose.model('user', userSchema, 'User');

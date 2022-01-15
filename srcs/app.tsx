@@ -27,7 +27,6 @@ const createServer = () => {
     app.use(router);
 
     return app;
-}
-
+};
 
 export default createServer;

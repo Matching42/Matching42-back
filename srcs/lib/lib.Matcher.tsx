@@ -4,7 +4,13 @@ import { User } from '../models';
 import { createGitRepo, createNotionPage, sendSlackMessage } from '../lib';
 import { logger } from '../config/winston';
 
-const makeTeam = async (subject: string, state: string, user: string[], slackID: string[], teamID: string): Promise<void> => {
+const makeTeam = async (
+    subject: string,
+    state: string,
+    user: string[],
+    slackID: string[],
+    teamID: string
+): Promise<void> => {
     const team = new Team({
         ID: `${teamID}_${Date.now()}`,
         leaderID: user[0],
