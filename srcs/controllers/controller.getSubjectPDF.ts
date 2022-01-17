@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 
-const SubjectPDF = {
+export const SubjectPDF = {
     ft_ssl_md5_try_rules: 'https://cdn.intra.42.fr/pdf/pdf/5945/ft_ssl_md5.en.pdf',
     'C Piscine C 00': 'https://cdn.intra.42.fr/pdf/pdf/28306/ko.subject.pdf',
     'C Piscine C 01': 'https://cdn.intra.42.fr/pdf/pdf/29198/ko.subject.pdf',
