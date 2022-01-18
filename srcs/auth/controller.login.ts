@@ -49,7 +49,6 @@ const granted: RequestHandler = async (req, res) => {
             },
         });
         const userFrom42 = await getUserFrom42(data.data.access_token as string);
-        console.log('2');
         if (userFrom42.cursus_users.length < 2) {
             res.status(400).send({
                 success: false,

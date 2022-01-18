@@ -53,13 +53,11 @@ function getRandomIntInclusive(min, max) {
 }
 
 const matching = async (subject, user, min: number, max: number): Promise<void> => {
-    console.log(user);
     try {
         while (user.length > 0) {
             const matchingNumber: number = getRandomIntInclusive(min, max);
             const userID: string[] = user.slice(0, matchingNumber).map((user) => user.ID);
             const slackID: string[] = user.slice(0, matchingNumber).map((user) => user.slackID);
-            console.log(slackID);
             const teamName: string = genTeamName(subject, userID[0]);
             const state: string = userID.length >= min ? 'progress' : 'wait_member';
             await makeTeam(subject, state, userID, slackID, teamName);
