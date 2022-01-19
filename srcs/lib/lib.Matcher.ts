@@ -63,7 +63,7 @@ const matching = async (subject, user, min: number, max: number): Promise<void> 
             const teamID: string = `${teamName}_${Date.now()}`
             const state: string = userID.length >= min ? 'progress' : 'wait_member';
             await makeTeam(subject, state, userID, slackID, teamName, teamID);
-            await updateUser(userID, teamName);
+            await updateUser(userID, teamID);
             await updateWaitlist(subject, userID);
             user.splice(0, matchingNumber);
         }
