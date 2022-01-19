@@ -9,10 +9,11 @@ const makeTeam = async (
     state: string,
     user: string[],
     slackID: string[],
+    teamName: string,
     teamID: string
 ): Promise<void> => {
     const team = new Team({
-        ID: `${teamID}_${Date.now()}`,
+        ID: teamID,
         leaderID: user[0],
         memberID: user,
         subject: subject,
@@ -20,7 +21,7 @@ const makeTeam = async (
         startDate: Date.now(),
         notionLink: await createNotionPage(teamID, subject, user),
         gitLink: await createGitRepo(subject, teamID),
-        teamName: teamID,
+        teamName: teamName,
     });
     for (let i = 0; i < 3 && (await sendSlackMessage(team, slackID)) === false; i++);
     logger.info(team);
@@ -59,9 +60,10 @@ const matching = async (subject, user, min: number, max: number): Promise<void> 
             const userID: string[] = user.slice(0, matchingNumber).map((user) => user.ID);
             const slackID: string[] = user.slice(0, matchingNumber).map((user) => user.slackID);
             const teamName: string = genTeamName(subject, userID[0]);
+            const teamID: string = `${teamName}_${Date.now()}`
             const state: string = userID.length >= min ? 'progress' : 'wait_member';
-            await makeTeam(subject, state, userID, slackID, teamName);
-            await updateUser(userID, teamName);
+            await makeTeam(subject, state, userID, slackID, teamName, teamID);
+            await updateUser(userID, teamID);
             await updateWaitlist(subject, userID);
             user.splice(0, matchingNumber);
         }
